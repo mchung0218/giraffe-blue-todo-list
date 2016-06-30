@@ -69,3 +69,44 @@ main {
   margin: 0;
   list-style: none;
 }
+
+.todo-list__task {
+  padding-left: 30px;
+  padding-right: 30px;
+  border-top: 2px solid #d1d2d4;
+}
+
+.todo-list__task-name, .todo-list__task-btn-option {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.todo-list__task-btn-option, .todo-list__task-btn-remove {
+  width: 50px;
+  height: 50px;
+}
+
+.todo-list__task-btn-option {
+  border: 2px solid #d1d2d4;
+  border-radius: 50%;
+  background-color: #e6e7e8;
+}
+
+.todo-list__task-btn-option:hover {
+  background-color: #cbced0;
+}
+
+.todo-list__task-btn-remove {
+  float: right;
+  visibility: hidden;
+  border: 0;
+  background-color: transparent;
+}
+
+.todo-list:hover .todo-list__task-btn-remove, .touch .todo-list__task-btn-remove {
+  visibility: visible;
+}
+
+.todo-list__task-name {
+  margin: 0 0 0 10px;
+}
