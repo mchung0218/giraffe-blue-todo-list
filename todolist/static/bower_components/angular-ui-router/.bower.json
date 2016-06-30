@@ -1,0 +1,11 @@
+{
+  "name": "angular-ui-router",
+  "_cacheHeaders": {
+    "Last-Modified": "Sun, 07 Feb 2016 18:47:20 GMT",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js"
+}

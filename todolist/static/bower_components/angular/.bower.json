@@ -1,0 +1,11 @@
+{
+  "name": "angular",
+  "_cacheHeaders": {
+    "Last-Modified": "Thu, 16 Jun 2016 05:46:44 GMT",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.js",
+  "_target": "*",
+  "_originalSource": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.js"
+}
