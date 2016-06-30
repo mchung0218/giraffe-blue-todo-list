@@ -1,0 +1,19 @@
+// Todo block
+.todo-form {
+    // Label and input
+    &__label, &__input {
+        display:block;
+    }
+
+    // Input box
+    &__input {
+        width:100%;
+        padding:15px;
+
+        border:0;
+
+        text-align:left;
+        
+        background-color:$gray;
+    }
+}

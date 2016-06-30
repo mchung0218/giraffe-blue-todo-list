@@ -1,0 +1,12 @@
+// Todo list
+.todo-list {
+    padding:0;
+    margin:0;
+
+    list-style:none;
+
+    // Tasks
+    &__task {
+        @extend .todo-form__input;
+    }
+}
