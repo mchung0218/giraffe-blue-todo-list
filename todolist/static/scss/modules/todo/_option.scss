@@ -1,0 +1,71 @@
+@import "../../utils/extends";
+
+// Option window
+.todo-list__task-option {
+    @extend %reset-ul;
+
+    position:absolute;
+    top:30px;
+    left:-130px;
+
+    border:1px solid $gray-dark;
+
+    // The option levels
+    &-level {
+        @extend .todo-form__input;
+
+        font-size:$font-size-small;
+        font-weight:300;
+
+        // Excluding first-child, set border on top
+        &:not(:first-child) {
+            border-top:1px solid $gray-dark;
+        }
+
+        &:hover {
+            background-color:darken($gray-light, 5%);
+        }
+
+        // Icon and label
+        &-icon, &-label {
+            display:inline-block;
+            vertical-align:middle;
+        }
+
+        // Icon
+        &-icon {
+            @extend .todo-list__task-btn-option;
+
+            width:25px;
+            height:25px;
+            margin-right:10px;
+
+            // Icon fills
+            &--important, &--moderate, &--low {
+                &::before {
+                    top:2px;
+                    bottom:2px;
+                    left:2px;
+                    right:2px;
+                }
+            }
+
+            // Extend the same styles as the option toggle button
+            &--completed {
+                @extend .todo-list__task-btn-option--completed;
+            }
+
+            &--important {
+                @extend .todo-list__task-btn-option--important;
+            }
+
+            &--moderate {
+                @extend .todo-list__task-btn-option--moderate;
+            }
+
+            &--low {
+                @extend .todo-list__task-btn-option--low;
+            }
+        }
+    }
+}

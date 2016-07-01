@@ -1,13 +1,14 @@
+@import "../../utils/extends";
+
 // Todo list
 .todo-list {
-    padding:0;
-    margin:0;
-
-    list-style:none;
+    @extend %reset-ul;
 
     // Tasks
     &__task {
         @extend .todo-form__input;
+
+        position:relative;
 
         padding-left:30px;
         padding-right:30px;
@@ -28,13 +29,55 @@
 
         // Option toggle button
         &-btn-option {
+            position:relative;
+
             border:2px solid $gray-dark;
             border-radius:50%;
 
-            background-color:$gray;
+            background-color:$gray-light;
 
             &:hover {
-                background-color:darken($gray, 10%);
+                background-color:darken($gray-light, 10%);
+            }
+
+            // Icon fills
+            &--completed {
+                background-image:url(../images/completed.png);
+                background-repeat:no-repeat;
+                background-size:cover;
+            }
+
+            &--important, &--moderate, &--low {
+                &::before {
+                    content:" ";
+
+                    position:absolute;
+                    top:5px;
+                    bottom:5px;
+                    left:5px;
+                    right:5px;
+
+                    border:2px solid $gray-dark;
+                    border-radius:50%;
+                }
+            }
+
+            &--important {
+                &::before {
+                    background-color:$red;
+                }
+            }
+
+            &--moderate {              
+                &::before {
+                    background-color:$orange;
+                }
+            }
+
+             &--low {              
+                &::before {
+                    background-color:$yellow;
+                }
             }
         }
 

@@ -52,48 +52,79 @@ main {
   border: 2px solid #d1d2d4;
 }
 
-.todo-form__label, .todo-form__input, .todo-list__task {
+.todo-form__label, .todo-form__input, .todo-list__task, .todo-list__task-option-level {
   display: block;
 }
 
-.todo-form__input, .todo-list__task {
+.todo-form__input, .todo-list__task, .todo-list__task-option-level {
   width: 100%;
   padding: 15px;
   border: 0;
   text-align: left;
-  background-color: #e6e7e8;
+  background-color: #f1f1f2;
 }
 
-.todo-list {
+.todo-list, .todo-list__task-option {
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
 .todo-list__task {
+  position: relative;
   padding-left: 30px;
   padding-right: 30px;
   border-top: 2px solid #d1d2d4;
 }
 
-.todo-list__task-name, .todo-list__task-btn-option {
+.todo-list__task-name, .todo-list__task-btn-option, .todo-list__task-option-level-icon {
   display: inline-block;
   vertical-align: middle;
 }
 
-.todo-list__task-btn-option, .todo-list__task-btn-remove {
+.todo-list__task-btn-option, .todo-list__task-option-level-icon, .todo-list__task-btn-remove {
   width: 50px;
   height: 50px;
 }
 
-.todo-list__task-btn-option {
+.todo-list__task-btn-option, .todo-list__task-option-level-icon {
+  position: relative;
   border: 2px solid #d1d2d4;
   border-radius: 50%;
-  background-color: #e6e7e8;
+  background-color: #f1f1f2;
 }
 
-.todo-list__task-btn-option:hover {
-  background-color: #cbced0;
+.todo-list__task-btn-option:hover, .todo-list__task-option-level-icon:hover {
+  background-color: #d7d7d9;
+}
+
+.todo-list__task-btn-option--completed, .todo-list__task-option-level-icon--completed {
+  background-image: url(../images/completed.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.todo-list__task-btn-option--important::before, .todo-list__task-option-level-icon--important::before, .todo-list__task-btn-option--moderate::before, .todo-list__task-option-level-icon--moderate::before, .todo-list__task-btn-option--low::before, .todo-list__task-option-level-icon--low::before {
+  content: " ";
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  border: 2px solid #d1d2d4;
+  border-radius: 50%;
+}
+
+.todo-list__task-btn-option--important::before, .todo-list__task-option-level-icon--important::before {
+  background-color: #eb3e30;
+}
+
+.todo-list__task-btn-option--moderate::before, .todo-list__task-option-level-icon--moderate::before {
+  background-color: #f38d30;
+}
+
+.todo-list__task-btn-option--low::before, .todo-list__task-option-level-icon--low::before {
+  background-color: #fecb2a;
 }
 
 .todo-list__task-btn-remove {
@@ -109,4 +140,48 @@ main {
 
 .todo-list__task-name {
   margin: 0 0 0 10px;
+}
+
+.todo-list, .todo-list__task-option {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.todo-list__task-option {
+  position: absolute;
+  top: 30px;
+  left: -130px;
+  border: 1px solid #d1d2d4;
+}
+
+.todo-list__task-option-level {
+  font-size: 0.66667rem;
+  font-weight: 300;
+}
+
+.todo-list__task-option-level:not(:first-child) {
+  border-top: 1px solid #d1d2d4;
+}
+
+.todo-list__task-option-level:hover {
+  background-color: #e4e4e6;
+}
+
+.todo-list__task-option-level-icon, .todo-list__task-option-level-label {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.todo-list__task-option-level-icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.todo-list__task-option-level-icon--important::before, .todo-list__task-option-level-icon--moderate::before, .todo-list__task-option-level-icon--low::before {
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
 }
