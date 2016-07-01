@@ -1,4 +1,4 @@
-@import "../../utils/extends";
+@import "../../../utils/extends";
 
 // Option window
 .todo-list__task-option {
@@ -8,7 +8,7 @@
     @media #{$mq-max-xsmall} {
         clear:both; // Clear away the floated buttons
 
-        margin-top:80px;
+        margin-top:25px;
 
         border-top:1px solid $gray-dark;
         border-bottom:1px solid $gray-dark;

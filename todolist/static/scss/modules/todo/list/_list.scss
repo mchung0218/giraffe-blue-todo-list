@@ -1,4 +1,4 @@
-@import "../../utils/extends";
+@import "../../../utils/extends";
 
 // Todo list
 .todo-list {
@@ -95,7 +95,8 @@
 
         // Task name
         &-name {
-            margin:0 70px;
+            //width:calc(100% - 100px);
+            margin:7px 65px 0;
         }
     }
 }

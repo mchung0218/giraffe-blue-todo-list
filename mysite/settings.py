@@ -82,12 +82,12 @@ DATABASES = {
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
         ### PostgreSQL Settings
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': 'bluegiraffe',
-         'USER': 'bluegiraffe',
-         'PASSWORD': 'blue',
-         'HOST': 'localhost',
-         'PORT': '',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'bluegiraffe',
+        # 'USER': 'bluegiraffe',
+        # 'PASSWORD': 'blue',
+        # 'HOST': 'localhost',
+        # 'PORT': '',
     }
 }
 
