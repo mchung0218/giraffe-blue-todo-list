@@ -1,12 +1,12 @@
 @import "../../../utils/extends";
 
-// Todo tasks sort dropdown area
-.todo-footer__sort {
+// Todo tasks filter dropdown area
+.todo-footer__filter {
     position:relative;
 
     float:right;
 
-    // Sort label and current sort
+    // Filter label and current filter
     &-label, &-current {
         position:relative;
 
@@ -14,7 +14,7 @@
         vertical-align:middle;
     }
 
-    // Current sort label and menu itself
+    // Current filter label and menu itself
     &-current, &-menu {
         width:150px;
         text-align:center;
@@ -32,7 +32,7 @@
 
         border:1px solid $gray-dark;
 
-        // Sort option
+        // Filter option
         &-option {
             @extend .todo-form__input;
 
