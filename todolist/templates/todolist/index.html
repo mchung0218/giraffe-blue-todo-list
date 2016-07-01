@@ -5,7 +5,7 @@
     <head>
         <title>Todo List</title>
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
         <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,400italic' rel='stylesheet' type='text/css'>
     </head>
 
@@ -14,7 +14,7 @@
             <h1>To Do List</h1>
             
             <div class="todo">
-                {# include 'todolist/form/form.html' #}
+                {% include 'todolist/form/form.html' %}
 
                 {# include 'todolist/list/list.html' #}
 

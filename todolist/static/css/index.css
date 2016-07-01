@@ -141,13 +141,13 @@ main {
 }
 
 .todo-list__task-name {
-  margin: 0 70px;
+  margin: 7px 65px 0;
 }
 
 @media (max-width: 767px) {
   .todo-list__task-option {
     clear: both;
-    margin-top: 80px;
+    margin-top: 25px;
     border-top: 1px solid #d1d2d4;
     border-bottom: 1px solid #d1d2d4;
   }
