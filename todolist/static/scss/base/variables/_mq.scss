@@ -1,0 +1,12 @@
+// Media queries
+$mq-width-small: 768px;
+$mq-width-medium: 992px;
+$mq-width-large: 1200px;
+
+$mq-min-small: "(min-width:" ($mq-width-small) ")";
+$mq-min-medium: "(min-width:" ($mq-width-medium) ")";
+$mq-min-large: "(min-width:" ($mq-width-large) ")";
+
+$mq-max-xsmall: "(max-width:" (($mq-width-small)-1) ")";
+$mq-max-small: "(max-width:" (($mq-width-medium)-1) ")";
+$mq-max-medium: "(max-width:" (($mq-width-large)-1) ")";

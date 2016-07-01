@@ -15,12 +15,6 @@
 
         border-top:2px solid $gray-dark;
 
-        // Task name, Option toggle button
-        &-name, &-btn-option {
-            display:inline-block;
-            vertical-align:middle;
-        }
-
         // The buttons
         &-btn-option, &-btn-remove {
             width:50px;
@@ -30,6 +24,8 @@
         // Option toggle button
         &-btn-option {
             position:relative;
+
+            float:left;
 
             border:2px solid $gray-dark;
             border-radius:50%;
@@ -99,7 +95,7 @@
 
         // Task name
         &-name {
-            margin:0 0 0 10px;
+            margin:0 70px;
         }
     }
 }

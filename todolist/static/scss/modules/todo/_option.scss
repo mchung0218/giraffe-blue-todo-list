@@ -4,11 +4,24 @@
 .todo-list__task-option {
     @extend %reset-ul;
 
-    position:absolute;
-    top:30px;
-    left:-130px;
+    // Xsmall: Set below the task
+    @media #{$mq-max-xsmall} {
+        clear:both; // Clear away the floated buttons
 
-    border:1px solid $gray-dark;
+        margin-top:80px;
+
+        border-top:1px solid $gray-dark;
+        border-bottom:1px solid $gray-dark;
+    }
+
+    // Small-large: Set to the left
+    @media #{$mq-min-small} {
+        position:absolute;
+        top:30px;
+        left:-130px;
+
+        border:1px solid $gray-dark;
+    }
 
     // The option levels
     &-level {
