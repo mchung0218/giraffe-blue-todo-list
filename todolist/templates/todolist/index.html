@@ -14,18 +14,11 @@
             <h1>To Do List</h1>
             
             <div class="todo">
-                <form class="todo-form">
-                    <label class="todo-form__label">
-                        <input type="text" class="todo-form__input" placeholder="What needs to be done?">
-                    </label>
-                </form>
-                
-                <ul class="todo-list">
-                    <!-- <li> of tasks here -->
-                    {# include 'todolist/task.html' #}
-                </ul>
+                {# include 'todolist/form/form.html' #}
 
-                 <!-- TODO: Active tasks counter, Sort by dropdown -->
+                {# include 'todolist/list/list.html' #}
+
+                {# include 'todolist/footer/footer.html' #}
             </div>
         </main>
     </body>

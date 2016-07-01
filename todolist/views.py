@@ -8,7 +8,7 @@ def list(request):
     c = {}
     c.update(csrf(request))
 
-    return render(request, 'todolist/list.html', c)
+    return render(request, 'todolist/index.html', c)
 
 
 # /task/{id}

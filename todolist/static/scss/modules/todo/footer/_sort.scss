@@ -1,0 +1,51 @@
+@import "../../../utils/extends";
+
+// Todo tasks sort dropdown area
+.todo-footer__sort {
+    position:relative;
+
+    float:right;
+
+    // Sort label and current sort
+    &-label, &-current {
+        position:relative;
+
+        display:inline-block;
+        vertical-align:middle;
+    }
+
+    // Current sort label and menu itself
+    &-current, &-menu {
+        width:150px;
+        text-align:center;
+    }
+
+    // Dropdown menu
+    &-menu {
+        @extend %reset-ul;
+
+        position:absolute;
+        top:calc(100% + 5px);
+        right:0;
+
+        width:150px;
+
+        border:1px solid $gray-dark;
+
+        // Sort option
+        &-option {
+            @extend .todo-form__input;
+
+            text-align:center;
+
+            // Copy the same styles as the options menu
+            &:hover {
+                @extend .todo-list__task-option-level:hover;
+            }
+
+            &:not(:first-child) {
+                @extend .todo-list__task-option-level:not(:first-child);
+            }
+        }
+    }
+}

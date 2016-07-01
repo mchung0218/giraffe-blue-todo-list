@@ -1,4 +1,10 @@
-@import "container";
-@import "form";
-@import "list";
-@import "option";
+@import "container/container";
+
+@import "form/form";
+
+@import "list/list";
+@import "list/option";
+
+@import "footer/footer";
+@import "footer/counter";
+@import "footer/sort";
