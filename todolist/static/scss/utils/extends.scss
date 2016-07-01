@@ -1,6 +1,10 @@
-%reset-ul {
-    padding:0;
-    margin:0;
+@import "../libs/sass-import-once";
 
-    list-style:none;
+@include exports("extends", false) {   // Export the extends only once, false suppresses the warning
+    %reset-ul {
+        padding:0;
+        margin:0;
+
+        list-style:none;
+    }
 }
