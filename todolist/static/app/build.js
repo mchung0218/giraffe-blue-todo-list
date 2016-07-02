@@ -4,12 +4,12 @@
 var formComponent = require("./components/form/todo-form.component");
 
 var listComponent = require("./components/list/todo-list.component"),
-    taskComponent = require("./components/list/todo-task.component"),
-    optionsComponent = require("./components/list/todo-options.component");
+    taskComponent = require("./components/list/task/todo-task.component"),
+    optionsComponent = require("./components/list/task/options/todo-options.component");
 
 var footerComponent = require("./components/footer/todo-footer.component"),
-    counterComponent = require("./components/footer/todo-counter.component"),
-    filterComponent = require("./components/footer/todo-filter.component");
+    counterComponent = require("./components/footer/counter/todo-counter.component"),
+    filterComponent = require("./components/footer/filter/todo-filter.component");
 
 var app = angular.module("todo", ["ngAnimate"]);
 
@@ -21,7 +21,7 @@ app.component("todoForm", formComponent)
     .component("todoCounter", counterComponent)
     .component("todoFilter", filterComponent);
 
-},{"./components/footer/todo-counter.component":2,"./components/footer/todo-filter.component":3,"./components/footer/todo-footer.component":4,"./components/form/todo-form.component":5,"./components/list/todo-list.component":6,"./components/list/todo-options.component":7,"./components/list/todo-task.component":8}],2:[function(require,module,exports){
+},{"./components/footer/counter/todo-counter.component":2,"./components/footer/filter/todo-filter.component":3,"./components/footer/todo-footer.component":4,"./components/form/todo-form.component":5,"./components/list/task/options/todo-options.component":6,"./components/list/task/todo-task.component":7,"./components/list/todo-list.component":8}],2:[function(require,module,exports){
 "use strict";
 
 function CounterCtrl() {
@@ -31,7 +31,7 @@ function CounterCtrl() {
 
 module.exports = {
     controller: CounterCtrl,
-    templateUrl: "/static/app/components/footer/todo-counter.html"
+    templateUrl: "/static/app/components/footer/counter/todo-counter.html"
 };
 
 },{}],3:[function(require,module,exports){
@@ -44,7 +44,7 @@ function FilterCtrl() {
 
 module.exports = {
     controller: FilterCtrl,
-    templateUrl: "/static/app/components/footer/todo-filter.html"
+    templateUrl: "/static/app/components/footer/filter/todo-filter.html"
 };
 
 },{}],4:[function(require,module,exports){
@@ -76,18 +76,6 @@ module.exports = {
 },{}],6:[function(require,module,exports){
 "use strict";
 
-function ListCtrl() {
-
-}
-
-module.exports = {
-    controller: ListCtrl,
-    templateUrl: "/static/app/components/list/todo-list.html"
-};
-
-},{}],7:[function(require,module,exports){
-"use strict";
-
 function OptionsCtrl() {
 
 }
@@ -95,11 +83,11 @@ function OptionsCtrl() {
 
 module.exports = {
     controller: OptionsCtrl,
-    templateUrl: "/static/app/components/list/todo-options.html"
+    templateUrl: "/static/app/components/list/task/options/todo-options.html"
 
 };
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 function TaskCtrl() {
@@ -109,8 +97,20 @@ function TaskCtrl() {
 
 module.exports = {
     controller: TaskCtrl,
-    templateUrl: "/static/app/components/list/todo-task.html"
+    templateUrl: "/static/app/components/list/task/todo-task.html"
 
+};
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
+function ListCtrl() {
+
+}
+
+module.exports = {
+    controller: ListCtrl,
+    templateUrl: "/static/app/components/list/todo-list.html"
 };
 
 },{}]},{},[1]);
