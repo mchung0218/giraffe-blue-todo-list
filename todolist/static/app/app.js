@@ -3,6 +3,8 @@
 // Requires
 var httpConfig = require("./app.config");
 
+var mainComponent = require("./components/todo.component");
+
 var formComponent = require("./components/form/todo-form.component");
 
 var listComponent = require("./components/list/todo-list.component"),
@@ -24,7 +26,8 @@ var app = angular.module("todo", ["ngAnimate"]);
 app.config(["$httpProvider", httpConfig]);
 
 // Components
-app.component("todoForm", formComponent)
+app.component("todo", mainComponent)
+    .component("todoForm", formComponent)
     .component("todoList", listComponent)
     .component("todoTask", taskComponent)
     .component("todoOptions", optionsComponent)

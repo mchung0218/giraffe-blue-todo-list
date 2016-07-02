@@ -17,6 +17,8 @@ module.exports = httpConfig;
 // Requires
 var httpConfig = require("./app.config");
 
+var mainComponent = require("./components/todo.component");
+
 var formComponent = require("./components/form/todo-form.component");
 
 var listComponent = require("./components/list/todo-list.component"),
@@ -38,7 +40,8 @@ var app = angular.module("todo", ["ngAnimate"]);
 app.config(["$httpProvider", httpConfig]);
 
 // Components
-app.component("todoForm", formComponent)
+app.component("todo", mainComponent)
+    .component("todoForm", formComponent)
     .component("todoList", listComponent)
     .component("todoTask", taskComponent)
     .component("todoOptions", optionsComponent)
@@ -46,7 +49,7 @@ app.component("todoForm", formComponent)
     .component("todoCounter", counterComponent)
     .component("todoFilter", filterComponent);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/options/todo-options.component":7,"./components/list/task/todo-task.component":8,"./components/list/todo-list.component":9}],3:[function(require,module,exports){
+},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/options/todo-options.component":7,"./components/list/task/todo-task.component":8,"./components/list/todo-list.component":9,"./components/todo.component":10}],3:[function(require,module,exports){
 "use strict";
 
 function CounterCtrl() {
@@ -136,6 +139,18 @@ function ListCtrl() {
 module.exports = {
     controller: ListCtrl,
     templateUrl: "/static/app/components/list/todo-list.html"
+};
+
+},{}],10:[function(require,module,exports){
+"use strict";
+
+function TodoCtrl() {
+
+}
+
+module.exports = {
+    controller: TodoCtrl,
+    templateUrl: "/static/app/components/todo.html"
 };
 
 },{}]},{},[2]);
