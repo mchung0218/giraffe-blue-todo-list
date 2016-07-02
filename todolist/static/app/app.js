@@ -1,5 +1,8 @@
 "use strict";
 
+// Requires
+var httpConfig = require("./app.config");
+
 var formComponent = require("./components/form/todo-form.component");
 
 var listComponent = require("./components/list/todo-list.component"),
@@ -10,8 +13,17 @@ var footerComponent = require("./components/footer/todo-footer.component"),
     counterComponent = require("./components/footer/counter/todo-counter.component"),
     filterComponent = require("./components/footer/filter/todo-filter.component");
 
+
+
+
+
+// Instance of the app
 var app = angular.module("todo", ["ngAnimate"]);
 
+// Configurations
+app.config(["$httpProvider", httpConfig]);
+
+// Components
 app.component("todoForm", formComponent)
     .component("todoList", listComponent)
     .component("todoTask", taskComponent)
