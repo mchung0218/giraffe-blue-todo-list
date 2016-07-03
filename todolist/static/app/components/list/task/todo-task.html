@@ -1,5 +1,5 @@
 <button type="button" class="todo-list__task-btn-remove" title="Remove the task" aria-label="Remove the task"><img class="todo-list__task-btn-remove-icon img-responsive" src="/static/images/remove.png" alt="Remove task"></button>
-<button type="button" class="todo-list__task-btn-option todo-list__task-btn-option--low" title="Open the task options window" aria-label="Open the task options window"></button>
+<button type="button" class="todo-list__task-btn-option todo-list__task-btn-option--low" title="Open the task options window" aria-label="Open the task options window" ng-click="$ctrl.toggleOptionsMenu()"></button>
 <p class="todo-list__task-name" ng-bind="::$ctrl.name"></p>
 
 <todo-options></todo-options>
