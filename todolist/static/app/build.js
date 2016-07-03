@@ -15,22 +15,20 @@ module.exports = httpConfig;
 "use strict";
 
 // Requires
-var httpConfig = require("./app.config");
+var httpConfig =        require("./app.config");
 
-var mainComponent = require("./components/todo.component");
+var mainComponent =     require("./components/todo.component");
 
-var formComponent = require("./components/form/todo-form.component");
+var formComponent =     require("./components/form/todo-form.component");
 
-var listComponent = require("./components/list/todo-list.component"),
-    taskComponent = require("./components/list/task/todo-task.component"),
-    optionsComponent = require("./components/list/task/options/todo-options.component");
+var listComponent =     require("./components/list/todo-list.component"),
+    taskComponent =     require("./components/list/task/todo-task.component"),
+    optionsComponent =  require("./components/list/task/options/todo-options.component"),
+    taskFact =          require("./components/list/task/todo-task.factory");
 
-var footerComponent = require("./components/footer/todo-footer.component"),
-    counterComponent = require("./components/footer/counter/todo-counter.component"),
-    filterComponent = require("./components/footer/filter/todo-filter.component");
-
-
-
+var footerComponent =   require("./components/footer/todo-footer.component"),
+    counterComponent =  require("./components/footer/counter/todo-counter.component"),
+    filterComponent =   require("./components/footer/filter/todo-filter.component");
 
 
 // Instance of the app
@@ -38,6 +36,9 @@ var app = angular.module("todo", ["ngAnimate"]);
 
 // Configurations
 app.config(["$httpProvider", httpConfig]);
+
+// Services/factories
+app.factory("taskFact", taskFact);
 
 // Components
 app.component("todo", mainComponent)
@@ -49,7 +50,7 @@ app.component("todo", mainComponent)
     .component("todoCounter", counterComponent)
     .component("todoFilter", filterComponent);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/options/todo-options.component":7,"./components/list/task/todo-task.component":8,"./components/list/todo-list.component":9,"./components/todo.component":10}],3:[function(require,module,exports){
+},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/options/todo-options.component":7,"./components/list/task/todo-task.component":8,"./components/list/task/todo-task.factory":9,"./components/list/todo-list.component":10,"./components/todo.component":11}],3:[function(require,module,exports){
 "use strict";
 
 function CounterCtrl() {
@@ -122,32 +123,66 @@ function TaskCtrl() {
 
 }
 
-
 module.exports = {
     controller: TaskCtrl,
-    templateUrl: "/static/app/components/list/task/todo-task.html"
-
+    templateUrl: "/static/app/components/list/task/todo-task.html",
+    bindings: {     
+        // These are HTML attributes passed as parameters to the controller
+        "name": "@"
+    }
 };
 
 },{}],9:[function(require,module,exports){
 "use strict";
 
-function ListCtrl() {
-
+/**
+ * Task()
+ * Task object.
+ * @param name: Name of task.
+ */
+function Task(name) {
+    this.name = name;
 }
 
-module.exports = {
-    controller: ListCtrl,
-    templateUrl: "/static/app/components/list/todo-list.html"
+// Exports to 
+module.exports = function() {
+    return {
+        create: function(name) {
+            return new Task(name);
+        }
+    };
 };
 
 },{}],10:[function(require,module,exports){
 "use strict";
 
-function TodoCtrl() {
+function ListCtrl(taskFact) {
+    var vm = this;
 
+    // List of tasks
+    vm.taskList = [];
 }
 
+module.exports = {
+    controller: ListCtrl,
+    templateUrl: ["taskFact", function(taskFact) {
+        return "/static/app/components/list/todo-list.html";
+    }]
+};
+
+},{}],11:[function(require,module,exports){
+"use strict";
+
+/**
+ * TodoCtrl()
+ * The controller for the entire todo container.
+ */
+function TodoCtrl() {
+    var vm = this;
+}
+
+
+// Export the component (invoked in app.js)
 module.exports = {
     controller: TodoCtrl,
     templateUrl: "/static/app/components/todo.html"

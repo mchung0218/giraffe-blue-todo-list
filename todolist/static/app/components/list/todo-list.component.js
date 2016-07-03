@@ -1,10 +1,15 @@
 "use strict";
 
-function ListCtrl() {
+function ListCtrl(taskFact) {
+    var vm = this;
 
+    // List of tasks
+    vm.taskList = [];
 }
 
 module.exports = {
     controller: ListCtrl,
-    templateUrl: "/static/app/components/list/todo-list.html"
+    templateUrl: ["taskFact", function(taskFact) {
+        return "/static/app/components/list/todo-list.html";
+    }]
 };
