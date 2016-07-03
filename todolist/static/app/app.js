@@ -17,7 +17,7 @@ var footerComponent =   require("./components/footer/todo-footer.component"),
     filterComponent =   require("./components/footer/filter/todo-filter.component");
 
 
-// Instance of the app
+// App module
 var app = angular.module("todo", ["ngAnimate"]);
 
 // Configurations

@@ -31,7 +31,7 @@ var footerComponent =   require("./components/footer/todo-footer.component"),
     filterComponent =   require("./components/footer/filter/todo-filter.component");
 
 
-// Instance of the app
+// App module
 var app = angular.module("todo", ["ngAnimate"]);
 
 // Configurations
@@ -146,17 +146,13 @@ function Task(name) {
 
 // Exports to 
 module.exports = function() {
-    return {
-        create: function(name) {
-            return new Task(name);
-        }
-    };
+    return Task;
 };
 
 },{}],10:[function(require,module,exports){
 "use strict";
 
-function ListCtrl(taskFact) {
+function ListCtrl(Task) {
     var vm = this;
 
     // List of tasks
@@ -164,10 +160,8 @@ function ListCtrl(taskFact) {
 }
 
 module.exports = {
-    controller: ListCtrl,
-    templateUrl: ["taskFact", function(taskFact) {
-        return "/static/app/components/list/todo-list.html";
-    }]
+    controller: ["taskFact", ListCtrl],
+    templateUrl: "/static/app/components/list/todo-list.html"
 };
 
 },{}],11:[function(require,module,exports){

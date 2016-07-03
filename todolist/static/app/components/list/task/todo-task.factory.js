@@ -11,9 +11,5 @@ function Task(name) {
 
 // Exports to 
 module.exports = function() {
-    return {
-        create: function(name) {
-            return new Task(name);
-        }
-    };
+    return Task;
 };

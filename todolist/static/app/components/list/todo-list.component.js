@@ -1,6 +1,6 @@
 "use strict";
 
-function ListCtrl(taskFact) {
+function ListCtrl(Task) {
     var vm = this;
 
     // List of tasks
@@ -8,8 +8,6 @@ function ListCtrl(taskFact) {
 }
 
 module.exports = {
-    controller: ListCtrl,
-    templateUrl: ["taskFact", function(taskFact) {
-        return "/static/app/components/list/todo-list.html";
-    }]
+    controller: ["taskFact", ListCtrl],
+    templateUrl: "/static/app/components/list/todo-list.html"
 };
