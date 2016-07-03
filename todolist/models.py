@@ -2,10 +2,10 @@ from django.db import models
 
 # Create your models here.
 
-class user(models.Model):
-	username = models.CharField(max_length=30, primary_key=True)
-	email = models.CharField(max_length=30)
-	userpass = models.CharField(max_length=100000)
+#class user(models.Model):
+#	username = models.CharField(max_length=30, primary_key=True)
+#	email = models.CharField(max_length=30)
+#	userpass = models.CharField(max_length=100000)
 
 
 # class Task(models.Model):
