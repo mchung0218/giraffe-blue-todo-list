@@ -48,10 +48,10 @@ def task_completed(request, id):
         return JsonResponse({'error': 'false'})
 
 
-# /task/importance/{id}
-def task_importance(request, id):
+# /task/priority/{id}
+def task_priority(request, id):
 
-    # Set importance
+    # Set priority
     if request.method == 'PUT':
 
         task = get_object_or_404(Task, id=id)
