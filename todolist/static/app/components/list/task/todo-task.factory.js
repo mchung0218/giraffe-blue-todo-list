@@ -9,7 +9,11 @@ function Task(name) {
     this.name = name;
 }
 
-// Exports to 
+// Exports
 module.exports = function() {
-    return Task;
+    return {
+        create: function(name) {
+            return new Task(name);
+        }
+    };
 };
