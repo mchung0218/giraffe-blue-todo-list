@@ -1,13 +1,22 @@
 "use strict";
 
-function ListCtrl(Task) {
+/**
+ * ListCtrl()
+ * Controller for list.
+ * @param todo: The todo factory.
+ */
+function ListCtrl(todo) {
     var vm = this;
 
     // List of tasks
-    vm.taskList = [];
+    vm.taskList = todo.taskList;
 }
 
+// Exports
 module.exports = {
-    controller: ["taskFact", ListCtrl],
+    require: {  // Get access to TodoCtrl
+        parent: "^todo"
+    },
+    controller: ["todoFact", ListCtrl],
     templateUrl: "/static/app/components/list/todo-list.html"
 };

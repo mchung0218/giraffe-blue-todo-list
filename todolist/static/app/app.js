@@ -3,7 +3,8 @@
 // Requires
 var httpConfig =        require("./app.config");
 
-var mainComponent =     require("./components/todo.component");
+var mainComponent =     require("./components/todo.component"),
+    todoFact =          require("./components/todo.factory");
 
 var formComponent =     require("./components/form/todo-form.component");
 
@@ -24,7 +25,8 @@ var app = angular.module("todo", ["ngAnimate"]);
 app.config(["$httpProvider", httpConfig]);
 
 // Services/factories
-app.factory("taskFact", taskFact);
+app.factory("todoFact", ["taskFact", todoFact])
+    .factory("taskFact", taskFact);
 
 // Components
 app.component("todo", mainComponent)

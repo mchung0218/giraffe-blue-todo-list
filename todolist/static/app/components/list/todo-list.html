@@ -1,6 +1,4 @@
 <ul class="todo-list">
-    <button ng-click="$ctrl.taskList.push({ name: 'Test Task'})">Add task named "Test task" (test button)</button>
-
     <!-- <li> of tasks here -->
     <li class="todo-list__task clearfix" ng-repeat="task in $ctrl.taskList">
         <todo-task name="{{ task.name }}"></todo-task>
