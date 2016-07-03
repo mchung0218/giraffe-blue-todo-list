@@ -1,1 +1,5 @@
 Django==1.9.7
+libpq-dev
+postrgresql
+postgresql-contrib
+psycopg2
