@@ -27,7 +27,7 @@ def task(request, id):
         return JsonResponse({'error': 'false'})
 
     # Update task
-    elif request.method == 'PUT':
+    elif request.method == 'PATCH':
         return JsonResponse({'error': 'false'})
 
     # Delete task
@@ -39,7 +39,7 @@ def task(request, id):
 def task_completed(request, id):
 
     # Mark as completed
-    if request.method == 'PUT':
+    if request.method == 'PATCH':
 
         task = get_object_or_404(Task, id=id)
         task.completed = 1
@@ -52,7 +52,7 @@ def task_completed(request, id):
 def task_priority(request, id):
 
     # Set priority
-    if request.method == 'PUT':
+    if request.method == 'PATCH':
 
         task = get_object_or_404(Task, id=id)
         task.priority = request.body.decode("utf-8").split("=")[1]
