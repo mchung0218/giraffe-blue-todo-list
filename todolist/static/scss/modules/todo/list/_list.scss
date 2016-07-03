@@ -88,7 +88,7 @@
 
             // On hover of task container: Show Remove button
             // When touch screen: Do not hide it
-            .todo-list:hover &, .touch & {
+            .todo-list__task:hover &, .touch & {
                 visibility:visible;
             }
         }

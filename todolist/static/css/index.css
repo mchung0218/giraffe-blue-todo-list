@@ -136,7 +136,7 @@ main {
   background-color: transparent;
 }
 
-.todo-list:hover .todo-list__task-btn-remove, .touch .todo-list__task-btn-remove {
+.todo-list__task:hover .todo-list__task-btn-remove, .touch .todo-list__task-btn-remove {
   visibility: visible;
 }
 
