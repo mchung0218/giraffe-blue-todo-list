@@ -21,6 +21,7 @@ class user(models.Model):
 
 
 class Task(models.Model):
+	id = models.IntegerField(primary_key=True)
 	text = models.CharField(max_length=99999, null=True)
 	priority = models.CharField(max_length=20)
 	completed = models.IntegerField(default=0)
