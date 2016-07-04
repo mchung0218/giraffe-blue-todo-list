@@ -38,16 +38,12 @@ def task(request, id):
         return JsonResponse({'error': 'false'})
 
     # Update task
-    #elif request.method == 'PATCH':
-	#task = get_object_or_404(Task, id=id)
-	#task.text = request.POST["text"]
-	#task.save()
-	
-        #return JsonResponse({'error': 'false'})
+    elif request.method == 'PATCH':
+	return task_Update(request, id)
 
     # Delete task
-    #elif request.method == 'DELETE':
-        #return JsonResponse({'error': 'false'})
+    elif request.method == 'DELETE':
+        return task_delete(request, id)
 
 
 def task_update(request, id):
