@@ -2,6 +2,17 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.template.context_processors import csrf
 from todolist.models import Task
+from .forms import *
+
+
+# FOR TESTING ONLY
+def testUpdate(request):
+    form = testUpdateForm()
+    return render(request, 'todolist/testUpdateTask.html', {'form':form})
+
+def testDelete(request):
+    form = testDeleteForm()
+    return render(request, 'todolist/testDeleteTask.html', {'form':form})
 
 
 # /
@@ -27,13 +38,34 @@ def task(request, id):
         return JsonResponse({'error': 'false'})
 
     # Update task
-    elif request.method == 'PATCH':
-        return JsonResponse({'error': 'false'})
+    #elif request.method == 'PATCH':
+	#task = get_object_or_404(Task, id=id)
+	#task.text = request.POST["text"]
+	#task.save()
+	
+        #return JsonResponse({'error': 'false'})
 
     # Delete task
-    elif request.method == 'DELETE':
-        return JsonResponse({'error': 'false'})
+    #elif request.method == 'DELETE':
+        #return JsonResponse({'error': 'false'})
 
+
+def task_update(request, id):
+    try:
+        task = get_object_or_404(Task, id=id)
+        task.text = request.POST["text"]
+	task.save()
+        return JsonResponse({'error': 'false'})
+    except:
+        return JsonResponse({'error': 'true'})	
+
+def task_delete(request, id):
+    try:
+        task = get_object_or_404(Task, id=id)
+	task.delete()
+        return JsonResponse({'error': 'false'})
+    except:
+        return JsonResponse({'error': 'true'})
 
 # /task/completed/{id}
 def task_completed(request, id):
