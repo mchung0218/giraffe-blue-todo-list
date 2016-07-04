@@ -39,7 +39,7 @@ def task(request, id):
 
     # Update task
     elif request.method == 'PATCH':
-	return task_Update(request, id)
+	return task_update(request, id)
 
     # Delete task
     elif request.method == 'DELETE':
