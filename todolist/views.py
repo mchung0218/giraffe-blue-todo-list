@@ -39,7 +39,7 @@ def task(request, id):
 
     # Update task
     elif request.method == 'PATCH':
-	return task_update(request, id)
+        return task_update(request, id)
 
     # Delete task
     elif request.method == 'DELETE':
@@ -50,7 +50,7 @@ def task_update(request, id):
     try:
         task = get_object_or_404(Task, id=id)
         task.text = request.POST["text"]
-	task.save()
+        task.save()
         return JsonResponse({'error': 'false'})
     except:
         return JsonResponse({'error': 'true'})	
@@ -58,7 +58,7 @@ def task_update(request, id):
 def task_delete(request, id):
     try:
         task = get_object_or_404(Task, id=id)
-	task.delete()
+        task.delete()
         return JsonResponse({'error': 'false'})
     except:
         return JsonResponse({'error': 'true'})
