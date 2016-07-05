@@ -141,7 +141,22 @@ main {
 }
 
 .todo-list__task-name {
-  margin: 7px 65px 0;
+  display: block;
+  width: calc(100% - 130px);
+  min-height: 50px;
+  padding: 5px;
+  margin: 0 65px;
+  border: 0;
+  background-color: inherit;
+}
+
+.todo-list__task-name--span {
+  margin-top: 1px;
+}
+
+.todo-list__task-name:focus {
+  padding: 5px;
+  background-color: #FFF;
 }
 
 @media (max-width: 767px) {
