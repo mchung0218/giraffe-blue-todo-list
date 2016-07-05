@@ -25,7 +25,6 @@ var formComponent =     require("./components/form/todo-form.component");
 
 var listComponent =     require("./components/list/todo-list.component"),
     taskComponent =     require("./components/list/task/todo-task.component"),
-    optionsComponent =  require("./components/list/task/options/todo-options.component"),
     taskFact =          require("./components/list/task/todo-task.factory");
 
 var footerComponent =   require("./components/footer/todo-footer.component"),
@@ -48,12 +47,11 @@ app.component("todo", mainComponent)
     .component("todoForm", formComponent)
     .component("todoList", listComponent)
     .component("todoTask", taskComponent)
-    .component("todoOptions", optionsComponent)
     .component("todoFooter", footerComponent)
     .component("todoCounter", counterComponent)
     .component("todoFilter", filterComponent);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/options/todo-options.component":7,"./components/list/task/todo-task.component":8,"./components/list/task/todo-task.factory":9,"./components/list/todo-list.component":10,"./components/todo.component":11,"./components/todo.factory":12}],3:[function(require,module,exports){
+},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.component":7,"./components/list/task/todo-task.factory":8,"./components/list/todo-list.component":9,"./components/todo.component":10,"./components/todo.factory":11}],3:[function(require,module,exports){
 "use strict";
 
 function CounterCtrl() {
@@ -133,16 +131,6 @@ module.exports = {
 },{}],7:[function(require,module,exports){
 "use strict";
 
-module.exports = {
-    require: {
-        parent: "^todoTask"
-    },
-    templateUrl: "/static/app/components/list/task/options/todo-options.html"
-};
-
-},{}],8:[function(require,module,exports){
-"use strict";
-
 /**
  * TaskCtrl()
  * The todo-task controller.
@@ -191,7 +179,7 @@ module.exports = {
     }
 };
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 /**
@@ -235,7 +223,7 @@ module.exports = function() {
     return Task;
 };
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 /**
@@ -256,7 +244,7 @@ module.exports = {
     templateUrl: "/static/app/components/list/todo-list.html"
 };
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 /**
@@ -274,7 +262,7 @@ module.exports = {
     templateUrl: "/static/app/components/todo.html"
 };
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 /**
