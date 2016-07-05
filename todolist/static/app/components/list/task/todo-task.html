@@ -1,0 +1,41 @@
+<button type="button" 
+        class="todo-list__task-btn-remove" 
+        title="Remove the task" 
+        aria-label="Remove the task" 
+        ng-click="$ctrl.deleteTask($ctrl.task.id)">
+    <img class="todo-list__task-btn-remove-icon img-responsive" src="/static/images/remove.png" alt="Remove task">
+</button>
+
+<button type="button" 
+        class="todo-list__task-btn-option todo-list__task-btn-option--low" 
+        title="Open the task options window" 
+        aria-label="Open the task options window" 
+        ng-click="$ctrl.toggleOptionsMenu()"
+        ng-class="[
+            { 'todo-list__task-btn-option--completed': $ctrl.task.priority === 0 },
+            { 'todo-list__task-btn-option--important': $ctrl.task.priority === 3 },
+            { 'todo-list__task-btn-option--moderate': $ctrl.task.priority === 2 },
+            { 'todo-list__task-btn-option--low': $ctrl.task.priority === 1 },
+        ]">
+</button>
+
+<p class="todo-list__task-name">{{ $ctrl.task.name }}</p>
+
+<ul class="todo-list__task-option" ng-show="$ctrl.optionsMenuOpen">
+    <li class="todo-list__task-option-level" role="button" aria-label="Set task completed" ng-click="$ctrl.changePriority($ctrl.task.id, 0)">
+        <span class="todo-list__task-option-level-icon todo-list__task-option-level-icon--completed"></span>
+        <span class="todo-list__task-option-level-label">Completed</span>
+    </li>
+    <li class="todo-list__task-option-level" role="button" aria-label="Set important priority" ng-click="$ctrl.changePriority($ctrl.task.id, 3)">
+        <span class="todo-list__task-option-level-icon todo-list__task-option-level-icon--important"></span> 
+        <span class="todo-list__task-option-level-label">Important</span>
+    </li>
+    <li class="todo-list__task-option-level" role="button" aria-label="Set moderate priority" ng-click="$ctrl.changePriority($ctrl.task.id, 2)">
+        <span class="todo-list__task-option-level-icon todo-list__task-option-level-icon--moderate"></span> 
+        <span class="todo-list__task-option-level-label">Moderate</span>
+    </li>
+    <li class="todo-list__task-option-level" role="button" aria-label="Set low priority" ng-click="$ctrl.changePriority($ctrl.task.id, 1)">
+        <span class="todo-list__task-option-level-icon todo-list__task-option-level-icon--low"></span> 
+        <span class="todo-list__task-option-level-label">Low</span>
+    </li>
+</ul>

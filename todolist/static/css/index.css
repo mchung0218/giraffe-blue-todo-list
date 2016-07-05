@@ -136,7 +136,7 @@ main {
   background-color: transparent;
 }
 
-.todo-list:hover .todo-list__task-btn-remove, .touch .todo-list__task-btn-remove {
+.todo-list__task:hover .todo-list__task-btn-remove, .touch .todo-list__task-btn-remove {
   visibility: visible;
 }
 
@@ -158,6 +158,7 @@ main {
     position: absolute;
     top: 30px;
     left: -130px;
+    z-index: 5;
     border: 1px solid #d1d2d4;
   }
 }
@@ -222,6 +223,7 @@ main {
   position: absolute;
   top: calc(100% + 5px);
   right: 0;
+  z-index: 5;
   width: 150px;
   border: 1px solid #d1d2d4;
 }
