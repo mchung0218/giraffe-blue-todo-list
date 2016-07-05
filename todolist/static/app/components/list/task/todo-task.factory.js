@@ -13,9 +13,9 @@ function Task(name, id) {
 }
 
 /**
- * changePriority()
+ * Task.prototype.changePriority()
  * Changes the priority level of the task.
- * @param priority: The priority level as a number.
+ * @param priority: The new priority level as a number.
  */
 Task.prototype.changePriority = function(priority) {
     // Priority levels
@@ -27,13 +27,14 @@ Task.prototype.changePriority = function(priority) {
 };
 
 /**
- * updateName()
+ * Task.prototype.editName()
  * Changes the task name.
  * @param name: The new name.
  */
-Task.prototype.updateName = function(name) {
+Task.prototype.editName = function(name) {
     this.name = name;
 };
+
 
 // Exports
 module.exports = function() {

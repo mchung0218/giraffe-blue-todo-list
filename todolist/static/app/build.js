@@ -147,26 +147,47 @@ module.exports = {
  * TaskCtrl()
  * The todo-task controller.
  */
-function TaskCtrl() {
+function TaskCtrl(todo) {
     var vm = this;
 
     // Initially the options menu is closed
     vm.optionsMenuOpen = false;
 
+    /**
+     * toggleOptionsMenu()
+     * Toggles the option menu.
+     */
     vm.toggleOptionsMenu = function() {
         vm.optionsMenuOpen = !vm.optionsMenuOpen;
     };
+
+    /**
+     * deleteTask()
+     * Deletes the task.
+     * @param taskId: The task id number.
+     */
+    vm.deleteTask = function(taskId) {
+        todo.deleteTask(taskId);
+    };
+
+    /**
+     * changePriority()
+     * Changes the priority of the task.
+     * @param taskId: The task id number.
+     * @param priority: The priority level as a number (see the Task object for the details).
+     */
+    vm.changePriority = function(taskId, priority) {
+        todo.changePriority(taskId, priority);
+    };
 }
 
+// Exports
 module.exports = {
-    require: {
-        parent: "^todo"
-    },
-    controller: TaskCtrl,
+    controller: ["todoFact", TaskCtrl],
     templateUrl: "/static/app/components/list/task/todo-task.html",
     bindings: {     
         // These are HTML attributes passed as parameters to the controller
-        "name": "@"
+        "task": "="     // The Task object itself
     }
 };
 
@@ -186,9 +207,9 @@ function Task(name, id) {
 }
 
 /**
- * changePriority()
+ * Task.prototype.changePriority()
  * Changes the priority level of the task.
- * @param priority: The priority level as a number.
+ * @param priority: The new priority level as a number.
  */
 Task.prototype.changePriority = function(priority) {
     // Priority levels
@@ -200,13 +221,14 @@ Task.prototype.changePriority = function(priority) {
 };
 
 /**
- * updateName()
+ * Task.prototype.editName()
  * Changes the task name.
  * @param name: The new name.
  */
-Task.prototype.updateName = function(name) {
+Task.prototype.editName = function(name) {
     this.name = name;
 };
+
 
 // Exports
 module.exports = function() {
@@ -230,9 +252,6 @@ function ListCtrl(todo) {
 
 // Exports
 module.exports = {
-    require: {  // Get access to TodoCtrl
-        parent: "^todo"
-    },
     controller: ["todoFact", ListCtrl],
     templateUrl: "/static/app/components/list/todo-list.html"
 };
@@ -260,7 +279,7 @@ module.exports = {
 
 /**
  * todoFactory()
- * Todo factory.
+ * Todo factory containing all operations.
  * @param Task: The todo-task factory (a Task object).
  * @return : The todo object.
  */
@@ -271,36 +290,66 @@ function todoFactory(Task) {
     todo.taskList = [];
 
     /**
+     * getTask()
+     * Gets a task from the list.
+     * @param taskId: The id of the task to get.
+     */
+    todo.getTask = function(taskId) {
+        // Go through the task list
+        for (var index = 0; index < todo.taskList.length; index++) {
+
+            // For the entry found, return the task object and the index location in the list
+            if (todo.taskList[index].id === taskId) {
+                return {
+                    "object": todo.taskList[index],
+                    "index": index
+                };
+            }
+        }
+    };
+
+    /**
      * addTask()
      * Adds a task and puts it to the list.
+     * @param params: Parameters for the task ({ name, id }).
      */
     todo.addTask = function(params) {
         todo.taskList.push(new Task(params.name, params.id));
-        console.log(params);
     };
 
     /**
      * deleteTask()
      * Deletes a task.
+     * @param taskId: The id of the task to delete.
      */
-    todo.deleteTask = function() {
-        
+    todo.deleteTask = function(taskId) {
+        var task = todo.getTask(taskId);
+
+        todo.taskList.splice(task.index, 1);
     };
 
     /**
      * editTask()
-     * Edits the task (name?).
+     * Edits the task name.
+     * @param taskId: The id of the task to edit.
+     * @param name: The task name to change to.
      */
-    todo.editTask = function() {
-
+    todo.editTask = function(taskId, name) {
+        var task = todo.getTask(taskId, name);
+        
+        task.object.editName(name);
     };
 
     /**
      * changePriority()
-     * Sets the task priority.
+     * Changes the task priority.
+     * @param taskId: The id of the task to change.
+     * @param priority: The priority to change to for the task.
      */
-    todo.changePriority = function() {
-
+    todo.changePriority = function(taskId, priority) {
+        var task = todo.getTask(taskId);
+        
+        task.object.changePriority(priority);
     };
 
     return todo;

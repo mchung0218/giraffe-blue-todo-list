@@ -14,9 +14,6 @@ function ListCtrl(todo) {
 
 // Exports
 module.exports = {
-    require: {  // Get access to TodoCtrl
-        parent: "^todo"
-    },
     controller: ["todoFact", ListCtrl],
     templateUrl: "/static/app/components/list/todo-list.html"
 };
