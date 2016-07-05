@@ -25,7 +25,9 @@ var formComponent =     require("./components/form/todo-form.component");
 
 var listComponent =     require("./components/list/todo-list.component"),
     taskComponent =     require("./components/list/task/todo-task.component"),
-    taskFact =          require("./components/list/task/todo-task.factory");
+    taskFact =          require("./components/list/task/todo-task.factory"),
+    taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
+    taskExitEditMode =  require("./components/list/task/todo-task.exitEditMode.directive.js");
 
 var footerComponent =   require("./components/footer/todo-footer.component"),
     counterComponent =  require("./components/footer/counter/todo-counter.component"),
@@ -51,7 +53,11 @@ app.component("todo", mainComponent)
     .component("todoCounter", counterComponent)
     .component("todoFilter", filterComponent);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.component":7,"./components/list/task/todo-task.factory":8,"./components/list/todo-list.component":9,"./components/todo.component":10,"./components/todo.factory":11}],3:[function(require,module,exports){
+// Directives
+app.directive("taskEnterEditMode", taskEnterEditMode)
+    .directive("taskExitEditMode", taskExitEditMode);
+
+},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.component":7,"./components/list/task/todo-task.enterEditMode.directive.js":8,"./components/list/task/todo-task.exitEditMode.directive.js":9,"./components/list/task/todo-task.factory":10,"./components/list/todo-list.component":11,"./components/todo.component":12,"./components/todo.factory":13}],3:[function(require,module,exports){
 "use strict";
 
 function CounterCtrl() {
@@ -180,6 +186,55 @@ module.exports = {
 };
 
 },{}],8:[function(require,module,exports){
+/**
+ * enterEditMode()
+ * On click of task name box (as a <span>), enter edit mode.
+ */
+function enterEditMode() {
+    return {
+        restrict: "A",      // Attribute only
+        link: function($scope, ele) {
+            // Get the input box
+            var theInput = ele.parent()[0].getElementsByClassName("todo-list__task-name--input")[0];
+
+            ele.on("click", function() {
+                ele.addClass("hide");
+
+                angular.element(theInput).removeClass("hide");
+                theInput.focus();
+            });
+        }
+    };
+}
+
+// Exports
+module.exports = enterEditMode;
+
+},{}],9:[function(require,module,exports){
+/**
+ * exitEditMode()
+ * On blur of task edit box, exit edit mode.
+ */
+function exitEditMode() {
+    return {
+        restrict: "A",      // Attribute only
+        link: function($scope, ele) {
+            // Get the task name box
+            var theSpan = ele.parent()[0].getElementsByClassName("todo-list__task-name--span")[0];
+
+            ele.on("blur", function() {
+                ele.addClass("hide");
+
+                angular.element(theSpan).removeClass("hide");
+            });
+        }
+    };
+}
+
+// Exports
+module.exports = exitEditMode;
+
+},{}],10:[function(require,module,exports){
 "use strict";
 
 /**
@@ -223,7 +278,7 @@ module.exports = function() {
     return Task;
 };
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 /**
@@ -244,7 +299,7 @@ module.exports = {
     templateUrl: "/static/app/components/list/todo-list.html"
 };
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 /**
@@ -262,7 +317,7 @@ module.exports = {
     templateUrl: "/static/app/components/todo.html"
 };
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 /**

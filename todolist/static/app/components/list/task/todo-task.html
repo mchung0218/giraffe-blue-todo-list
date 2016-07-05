@@ -19,7 +19,18 @@
         ]">
 </button>
 
-<p class="todo-list__task-name">{{ $ctrl.task.name }}</p>
+<input type="text"
+       class="todo-list__task-name todo-list__task-name--input hide" 
+       value="{{ $ctrl.task.name }}"
+       ng-model="$ctrl.task.name"
+       ng-focus="$ctrl.prevName = $ctrl.task.name"
+       ng-blur="$ctrl.task.name = $ctrl.task.name || $ctrl.prevName" 
+       task-exit-edit-mode>
+
+<span class="todo-list__task-name todo-list__task-name--span"
+      task-enter-edit-mode>
+      {{ $ctrl.task.name }}
+</span>
 
 <ul class="todo-list__task-option" ng-show="$ctrl.optionsMenuOpen">
     <li class="todo-list__task-option-level" role="button" aria-label="Set task completed" ng-click="$ctrl.changePriority($ctrl.task.id, 0)">
