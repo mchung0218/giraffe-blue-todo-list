@@ -13,6 +13,14 @@ pip install -r requirements.txt
 
 #### Linux/OSX
 pip3 install -r requirements.txt
+sudo apt-get install python-dev libpq-dev postgresql postgresql-contrib
+
+##### PostgreSQL DB
+CREATE DATABASE bluegiraffe;
+CREATE USER bluegiraffe WITH PASSWORD 'blue';
+GRANT ALL PRIVILEGES ON DATABASE bluegiraffe TO bluegiraffe;
+python3 manage.py makemigrations
+python3 manage.py migrate
 
 ## Run
 #### Windows:
