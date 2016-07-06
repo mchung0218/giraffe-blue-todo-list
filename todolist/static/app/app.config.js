@@ -12,8 +12,8 @@ function httpConfig($httpProvider, $resourceProvider) {
      // Change the name of header to what Django uses
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-    // Do not strip trailing slashes
-    // $resourceProvider.defaults.stripTrailingSlashes = false;
+    // Do not strip trailing slashes (e.g. /task/)
+    $resourceProvider.defaults.stripTrailingSlashes = false;
 }
 
 module.exports = httpConfig;
