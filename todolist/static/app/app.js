@@ -20,13 +20,13 @@ var footerComponent =   require("./components/footer/todo-footer.component"),
 
 
 // App module
-var app = angular.module("todo", ["ngAnimate"]);
+var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 
 // Configurations
-app.config(["$httpProvider", httpConfig]);
+app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
-app.factory("todoFact", ["taskFact", todoFact])
+app.factory("todoFact", ["$resource", todoFact])
     .factory("taskFact", taskFact);
 
 // Components

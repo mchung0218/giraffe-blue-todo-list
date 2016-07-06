@@ -3,14 +3,9 @@
 /**
  * todoFactory()
  * Todo factory containing all operations.
- * @param Task: The todo-task factory (a Task object).
- * @return : The todo object.
  */
-function todoFactory(Task) {
+function todoFactory($resource) {
     var todo = {};
-
-    // Keep track of tasks listed
-    todo.taskList = [];
 
     /**
      * getTask()
@@ -32,12 +27,40 @@ function todoFactory(Task) {
     };
 
     /**
+     * getTaskList()
+     * Gets the task list.
+     * @return A promise of the GET operation.
+     */
+    todo.getTaskList = function() {
+        var taskResource = $resource("/tasks/");
+
+        return taskResource.get().$promise;
+    };
+
+    /**
      * addTask()
-     * Adds a task and puts it to the list.
-     * @param params: Parameters for the task ({ name, id }).
+     * Adds a task.
+     * @param params: Parameters for the task ({ name, priority, id }).
+     * @return : A promise of the POST operation.
      */
     todo.addTask = function(params) {
-        todo.taskList.push(new Task(params.name, params.id));
+        var taskResource = $resource("/task/0", {}, {
+            save: {
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "transformRequest": function(obj) {     // Convert the JSON to seralized POST data
+                    var str = [];
+                    for (var p in obj) {
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    }
+                    return str.join("&");
+                }
+            }
+        });
+
+        return taskResource.save({}, params).$promise;
     };
 
     /**
@@ -46,9 +69,9 @@ function todoFactory(Task) {
      * @param taskId: The id of the task to delete.
      */
     todo.deleteTask = function(taskId) {
-        var task = todo.getTask(taskId);
+        var taskResource = $resource("/task/:id", { id: taskId });
 
-        todo.taskList.splice(task.index, 1);
+        return taskResource.delete({ id: taskId }).$promise;
     };
 
     /**

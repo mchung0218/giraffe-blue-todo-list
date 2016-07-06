@@ -21,15 +21,15 @@
 
 <input type="text"
        class="todo-list__task-name todo-list__task-name--input hide" 
-       value="{{ $ctrl.task.name }}"
-       ng-model="$ctrl.task.name"
-       ng-focus="$ctrl.prevName = $ctrl.task.name"
-       ng-blur="$ctrl.task.name = $ctrl.task.name || $ctrl.prevName" 
+       value="{{ $ctrl.task.text }}"
+       ng-model="$ctrl.task.text"
+       ng-focus="$ctrl.prevName = $ctrl.task.text"
+       ng-blur="$ctrl.task.text = $ctrl.task.text || $ctrl.prevName" 
        task-exit-edit-mode>
 
 <span class="todo-list__task-name todo-list__task-name--span"
       task-enter-edit-mode>
-      {{ $ctrl.task.name }}
+      {{ $ctrl.task.text }}
 </span>
 
 <ul class="todo-list__task-option" ng-show="$ctrl.optionsMenuOpen">

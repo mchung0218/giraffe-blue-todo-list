@@ -6,8 +6,15 @@
  * Configures the $http service.
  * @param $httpProvider: The $http provider.
  */
-function httpConfig($httpProvider) {
-    //console.log($httpProvider.defaults);
+function httpConfig($httpProvider, $resourceProvider) {
+    // Change the name of cookie to what Django uses
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+
+     // Change the name of header to what Django uses
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    // Do not strip trailing slashes
+    // $resourceProvider.defaults.stripTrailingSlashes = false;
 }
 
 module.exports = httpConfig;
@@ -35,13 +42,13 @@ var footerComponent =   require("./components/footer/todo-footer.component"),
 
 
 // App module
-var app = angular.module("todo", ["ngAnimate"]);
+var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 
 // Configurations
-app.config(["$httpProvider", httpConfig]);
+app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
-app.factory("todoFact", ["taskFact", todoFact])
+app.factory("todoFact", ["$resource", todoFact])
     .factory("taskFact", taskFact);
 
 // Components
@@ -60,11 +67,21 @@ app.directive("taskEnterEditMode", taskEnterEditMode)
 },{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.component":7,"./components/list/task/todo-task.enterEditMode.directive.js":8,"./components/list/task/todo-task.exitEditMode.directive.js":9,"./components/list/task/todo-task.factory":10,"./components/list/todo-list.component":11,"./components/todo.component":12,"./components/todo.factory":13}],3:[function(require,module,exports){
 "use strict";
 
-function CounterCtrl() {
+/**
+ * CounterCtrl()
+ * The controller for active tasks counter.
+ * @param todo: The todo factory.
+ */
+function CounterCtrl(todo) {
+    var vm = this;
 
+    // 1. Check the todo list
+    // 2. Filter out the tasks that are completed.
+    // 3. Bind a model on the DOM element
 }
 
 
+// Exports
 module.exports = {
     controller: CounterCtrl,
     templateUrl: "/static/app/components/footer/counter/todo-counter.html"
@@ -73,11 +90,17 @@ module.exports = {
 },{}],4:[function(require,module,exports){
 "use strict";
 
-function FilterCtrl() {
+/**
+ * FilterCtrl()
+ * The controller for the filter component.
+ */
+function FilterCtrl(todo) {
+    var vm = this;
 
+    // 1. Place an ng-class on the <li> task element which would hide the element depending on what the priority number is.
 }
 
-
+// Exports
 module.exports = {
     controller: FilterCtrl,
     templateUrl: "/static/app/components/footer/filter/todo-filter.html"
@@ -104,11 +127,8 @@ module.exports = {
  * The todo-form controller (input box).
  * @param todo: The todo object.
  */
-function FormCtrl(todo) {
+function FormCtrl(todo, $rootScope) {
     var vm = this;
-
-    // Use this to assign task id numbers
-    var taskNum = 1;
 
     /**
      * submit()
@@ -117,20 +137,25 @@ function FormCtrl(todo) {
     vm.submit = function() {
         // Take the form data, put it as an object
         var formData = {
-            "name": vm.form.taskName,
-            "id": taskNum
+            "text": vm.form.taskName,
+            "priority": "low"
         };
 
         // Add the task
-        todo.addTask(formData);
+        todo.addTask(formData).then(function(res) {
+            // If successful, update the list.
+            $rootScope.$broadcast("listUpdate");
 
-        taskNum++;
+        }, function(res) {
+
+
+        });
     };
 }
 
 // Exports
 module.exports = {
-    controller: ["todoFact", FormCtrl],
+    controller: ["todoFact", "$rootScope", FormCtrl],
     templateUrl: "/static/app/components/form/todo-form.html"
 };
 
@@ -286,16 +311,31 @@ module.exports = function() {
  * Controller for list.
  * @param todo: The todo factory.
  */
-function ListCtrl(todo) {
+function ListCtrl(todo, $rootScope) {
     var vm = this;
 
     // List of tasks
-    vm.taskList = todo.taskList;
+    vm.taskList = [];
+
+    // Get task list
+    vm.getTaskList = function() {
+        todo.getTaskList().then(function(response) {
+            vm.taskList = response.tasks;
+        });
+    };
+
+    // Create a listener where whenever tasks get deleted or added, the list should get updated.
+    $rootScope.$on("listUpdate", function() {
+        vm.getTaskList();
+    });
+
+    // Initial execution
+    vm.getTaskList();
 }
 
 // Exports
 module.exports = {
-    controller: ["todoFact", ListCtrl],
+    controller: ["todoFact", "$rootScope", ListCtrl],
     templateUrl: "/static/app/components/list/todo-list.html"
 };
 
@@ -323,14 +363,9 @@ module.exports = {
 /**
  * todoFactory()
  * Todo factory containing all operations.
- * @param Task: The todo-task factory (a Task object).
- * @return : The todo object.
  */
-function todoFactory(Task) {
+function todoFactory($resource) {
     var todo = {};
-
-    // Keep track of tasks listed
-    todo.taskList = [];
 
     /**
      * getTask()
@@ -352,12 +387,40 @@ function todoFactory(Task) {
     };
 
     /**
+     * getTaskList()
+     * Gets the task list.
+     * @return A promise of the GET operation.
+     */
+    todo.getTaskList = function() {
+        var taskResource = $resource("/tasks/");
+
+        return taskResource.get().$promise;
+    };
+
+    /**
      * addTask()
-     * Adds a task and puts it to the list.
-     * @param params: Parameters for the task ({ name, id }).
+     * Adds a task.
+     * @param params: Parameters for the task ({ name, priority, id }).
+     * @return : A promise of the POST operation.
      */
     todo.addTask = function(params) {
-        todo.taskList.push(new Task(params.name, params.id));
+        var taskResource = $resource("/task/0", {}, {
+            save: {
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "transformRequest": function(obj) {     // Convert the JSON to seralized POST data
+                    var str = [];
+                    for (var p in obj) {
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    }
+                    return str.join("&");
+                }
+            }
+        });
+
+        return taskResource.save({}, params).$promise;
     };
 
     /**
@@ -366,9 +429,9 @@ function todoFactory(Task) {
      * @param taskId: The id of the task to delete.
      */
     todo.deleteTask = function(taskId) {
-        var task = todo.getTask(taskId);
+        var taskResource = $resource("/task/:id", { id: taskId });
 
-        todo.taskList.splice(task.index, 1);
+        return taskResource.delete({ id: taskId }).$promise;
     };
 
     /**
