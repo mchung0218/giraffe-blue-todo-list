@@ -23,6 +23,7 @@
   "dependencies": {
     "angular": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.js",
     "angular-animate": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-animate.js",
-    "angular-ui-router": "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js"
+    "angular-ui-router": "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js",
+    "angular-resource": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-resource.js"
   }
 }
