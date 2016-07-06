@@ -25,8 +25,7 @@ function FormCtrl(todo, $rootScope) {
             $rootScope.$broadcast("listUpdate");
 
         }, function(res) {
-
-
+            alert("Failed to add task.");
         });
     };
 }

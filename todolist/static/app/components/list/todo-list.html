@@ -1,6 +1,5 @@
 <ul class="todo-list">
     <!-- <li> of tasks here -->
-    {{ $ctrl.taskList.length }}
     <li class="todo-list__task clearfix" ng-repeat="task in $ctrl.taskList track by task.id">
         <todo-task task="task"></todo-task>
     </li>

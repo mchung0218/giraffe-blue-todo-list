@@ -81,9 +81,9 @@ function todoFactory($resource) {
      * @param name: The task name to change to.
      */
     todo.editTask = function(taskId, name) {
-        var task = todo.getTask(taskId, name);
-        
-        task.object.editName(name);
+        var taskResource = $resource("/task/:id", { id: taskId });
+
+        return taskResource.delete({ id: taskId }).$promise;
     };
 
     /**

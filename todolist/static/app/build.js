@@ -147,8 +147,7 @@ function FormCtrl(todo, $rootScope) {
             $rootScope.$broadcast("listUpdate");
 
         }, function(res) {
-
-
+            alert("Failed to add task.");
         });
     };
 }
@@ -166,7 +165,7 @@ module.exports = {
  * TaskCtrl()
  * The todo-task controller.
  */
-function TaskCtrl(todo) {
+function TaskCtrl(todo, $rootScope) {
     var vm = this;
 
     // Initially the options menu is closed
@@ -186,7 +185,13 @@ function TaskCtrl(todo) {
      * @param taskId: The task id number.
      */
     vm.deleteTask = function(taskId) {
-        todo.deleteTask(taskId);
+        todo.deleteTask(taskId).then(function(res) {
+            // If successful, update view.
+            $rootScope.$broadcast("listUpdate");
+
+        }, function(res) {
+            alert("Task failed to get deleted.");
+        });
     };
 
     /**
@@ -202,7 +207,7 @@ function TaskCtrl(todo) {
 
 // Exports
 module.exports = {
-    controller: ["todoFact", TaskCtrl],
+    controller: ["todoFact", "$rootScope", TaskCtrl],
     templateUrl: "/static/app/components/list/task/todo-task.html",
     bindings: {     
         // These are HTML attributes passed as parameters to the controller
@@ -441,9 +446,9 @@ function todoFactory($resource) {
      * @param name: The task name to change to.
      */
     todo.editTask = function(taskId, name) {
-        var task = todo.getTask(taskId, name);
-        
-        task.object.editName(name);
+        var taskResource = $resource("/task/:id", { id: taskId });
+
+        return taskResource.delete({ id: taskId }).$promise;
     };
 
     /**
