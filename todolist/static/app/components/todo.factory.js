@@ -4,7 +4,7 @@
  * todoFactory()
  * Todo factory containing all operations.
  */
-function todoFactory($resource, $http) {
+function todoFactory(taskApi, $http) {
     var todo = {};
 
     /**
@@ -32,35 +32,18 @@ function todoFactory($resource, $http) {
      * @return A promise of the GET operation.
      */
     todo.getTaskList = function() {
-        var taskResource = $resource("/tasks/");
-
-        return taskResource.get().$promise;
+        return taskApi.Tasks.get().$promise;
     };
 
     /**
      * addTask()
      * Adds a task.
-     * @param params: Parameters for the task ({ name, priority, id }).
+     * @param params: Parameters for the task ({ name, priority }).
      * @return : A promise of the POST operation.
      */
     todo.addTask = function(params) {
-        var taskResource = $resource("/task/0", {}, {
-            save: {
-                "method": "POST",
-                "headers": {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                "transformRequest": function(obj) {     // Convert the JSON to seralized POST data
-                    var str = [];
-                    for (var p in obj) {
-                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                    }
-                    return str.join("&");
-                }
-            }
-        });
-
-        return taskResource.save({}, params).$promise;
+        params.id = 0;
+        return taskApi.Task.save(params).$promise;
     };
 
     /**
@@ -69,9 +52,7 @@ function todoFactory($resource, $http) {
      * @param taskId: The id of the task to delete.
      */
     todo.deleteTask = function(taskId) {
-        var taskResource = $resource("/task/:id", { id: taskId });
-
-        return taskResource.delete({ id: taskId }).$promise;
+        return taskApi.Task.delete({ id: taskId }).$promise;
     };
 
     /**
@@ -108,15 +89,10 @@ function todoFactory($resource, $http) {
     /**
      * markCompleted()
      * Mark task completed.
+     * @param taskId: The id of the task to change.
      */
     todo.markCompleted = function(taskId) {
-        var taskResource = $resource("/task/completed/:id", { id: taskId }, {
-            update: {
-                "method": "PATCH"
-            }
-        });
-
-        return taskResource.update({ id: taskId }).$promise;
+        return taskApi.TaskCompleted.update({ id: taskId }).$promise;
     };
 
     /**
@@ -126,13 +102,8 @@ function todoFactory($resource, $http) {
      * @param priority: The priority to change to for the task.
      */
     todo.changePriority = function(taskId, priority) {
-        var taskResource = $resource("/task/priority/:id", { id: taskId }, {
-            update: {
-                "method": "PATCH"
-            }
-        });
-
-        return taskResource.update(priority).$promise;
+        // return taskApi.TaskPriority.update({ id: taskId }, [{ priority: priority }]).$promise;
+        return $http.patch("/task/priority/" + taskId, [{ priority: priority }]);
     };
 
     return todo;

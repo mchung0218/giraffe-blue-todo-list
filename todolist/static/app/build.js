@@ -17,9 +17,9 @@ function httpConfig($httpProvider, $resourceProvider) {
     $resourceProvider.defaults.stripTrailingSlashes = false;
 
     // Enable PATCH action
-    $httpProvider.defaults.headers.patch = {
-        "Content-Type": "application/x-www-form-urlencoded"
-    };
+    // $httpProvider.defaults.headers.patch = {
+    //     "Content-Type": "application/json-patch+json"
+    // };
 }
 
 module.exports = httpConfig;
@@ -38,6 +38,7 @@ var formComponent =     require("./components/form/todo-form.component");
 var listComponent =     require("./components/list/todo-list.component"),
     taskComponent =     require("./components/list/task/todo-task.component"),
     taskFact =          require("./components/list/task/todo-task.factory"),
+    taskApiFact =           require("./components/list/task/todo-task.api.factory"),
     taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
     taskExitEditMode =  require("./components/list/task/todo-task.exitEditMode.directive.js");
 
@@ -53,8 +54,9 @@ var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
-app.factory("todoFact", ["$resource", "$http", todoFact])
-    .factory("taskFact", taskFact);
+app.factory("todoFact", ["taskApi", "$http", todoFact])
+    .factory("taskFact", taskFact)
+    .factory("taskApi", ["$resource", taskApiFact]);
 
 // Components
 app.component("todo", mainComponent)
@@ -69,7 +71,7 @@ app.component("todo", mainComponent)
 app.directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.component":7,"./components/list/task/todo-task.enterEditMode.directive.js":8,"./components/list/task/todo-task.exitEditMode.directive.js":9,"./components/list/task/todo-task.factory":10,"./components/list/todo-list.component":11,"./components/todo.component":12,"./components/todo.factory":13}],3:[function(require,module,exports){
+},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.api.factory":7,"./components/list/task/todo-task.component":8,"./components/list/task/todo-task.enterEditMode.directive.js":9,"./components/list/task/todo-task.exitEditMode.directive.js":10,"./components/list/task/todo-task.factory":11,"./components/list/todo-list.component":12,"./components/todo.component":13,"./components/todo.factory":14}],3:[function(require,module,exports){
 "use strict";
 
 /**
@@ -167,6 +169,53 @@ module.exports = {
 "use strict";
 
 /**
+ * taskApi()
+ * Factory containing all task API resources.
+ */
+function taskApi($resource) {
+    return {
+        // All tasks
+        "Tasks": $resource("/tasks/"),
+
+        // Single task
+        "Task": $resource("/task/:id", { id: "@id" }, {
+            save: {
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "transformRequest": function(obj) {     // Convert the JSON to seralized POST data
+                    var str = [];
+                    for (var p in obj) {
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    }
+                    return str.join("&");
+                }
+            }
+        }),
+
+        // Completed tasks
+        "TaskCompleted": $resource("/task/completed/:id", { id: "@id" }, {
+            update: {
+                "method": "PATCH"
+            }
+        }),
+
+        // Priority tasks
+        "TaskPriority": $resource("/task/priority/:id", { id: "@id" }, {
+            update: {
+                "method": "PATCH"
+            }
+        })
+    };
+}
+
+module.exports = taskApi;
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
+/**
  * TaskCtrl()
  * The todo-task controller.
  */
@@ -234,9 +283,12 @@ function TaskCtrl(todo, $rootScope) {
      */
     vm.changePriority = function(taskId, priority) {
         todo.changePriority(taskId, priority).then(function(res) {
+            console.log(res);
             $rootScope.$broadcast("listUpdate");
         }, function(res) {
-            alert("Task failed to change priority");
+            console.log(res);
+            // alert("Task failed to change priority");
+            document.write(res.data);
         });
     };
 
@@ -264,7 +316,7 @@ module.exports = {
     }
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /**
  * enterEditMode()
  * On click of task name box (as a <span>), enter edit mode.
@@ -289,7 +341,7 @@ function enterEditMode() {
 // Exports
 module.exports = enterEditMode;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * exitEditMode()
  * On blur of task edit box, exit edit mode.
@@ -313,7 +365,7 @@ function exitEditMode() {
 // Exports
 module.exports = exitEditMode;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 /**
@@ -357,7 +409,7 @@ module.exports = function() {
     return Task;
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 /**
@@ -393,7 +445,7 @@ module.exports = {
     templateUrl: "/static/app/components/list/todo-list.html"
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 /**
@@ -411,14 +463,14 @@ module.exports = {
     templateUrl: "/static/app/components/todo.html"
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 /**
  * todoFactory()
  * Todo factory containing all operations.
  */
-function todoFactory($resource, $http) {
+function todoFactory(taskApi, $http) {
     var todo = {};
 
     /**
@@ -446,35 +498,18 @@ function todoFactory($resource, $http) {
      * @return A promise of the GET operation.
      */
     todo.getTaskList = function() {
-        var taskResource = $resource("/tasks/");
-
-        return taskResource.get().$promise;
+        return taskApi.Tasks.get().$promise;
     };
 
     /**
      * addTask()
      * Adds a task.
-     * @param params: Parameters for the task ({ name, priority, id }).
+     * @param params: Parameters for the task ({ name, priority }).
      * @return : A promise of the POST operation.
      */
     todo.addTask = function(params) {
-        var taskResource = $resource("/task/0", {}, {
-            save: {
-                "method": "POST",
-                "headers": {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                "transformRequest": function(obj) {     // Convert the JSON to seralized POST data
-                    var str = [];
-                    for (var p in obj) {
-                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                    }
-                    return str.join("&");
-                }
-            }
-        });
-
-        return taskResource.save({}, params).$promise;
+        params.id = 0;
+        return taskApi.Task.save(params).$promise;
     };
 
     /**
@@ -483,9 +518,7 @@ function todoFactory($resource, $http) {
      * @param taskId: The id of the task to delete.
      */
     todo.deleteTask = function(taskId) {
-        var taskResource = $resource("/task/:id", { id: taskId });
-
-        return taskResource.delete({ id: taskId }).$promise;
+        return taskApi.Task.delete({ id: taskId }).$promise;
     };
 
     /**
@@ -522,15 +555,10 @@ function todoFactory($resource, $http) {
     /**
      * markCompleted()
      * Mark task completed.
+     * @param taskId: The id of the task to change.
      */
     todo.markCompleted = function(taskId) {
-        var taskResource = $resource("/task/completed/:id", { id: taskId }, {
-            update: {
-                "method": "PATCH"
-            }
-        });
-
-        return taskResource.update({ id: taskId }).$promise;
+        return taskApi.TaskCompleted.update({ id: taskId }).$promise;
     };
 
     /**
@@ -540,13 +568,8 @@ function todoFactory($resource, $http) {
      * @param priority: The priority to change to for the task.
      */
     todo.changePriority = function(taskId, priority) {
-        var taskResource = $resource("/task/priority/:id", { id: taskId }, {
-            update: {
-                "method": "PATCH"
-            }
-        });
-
-        return taskResource.update(priority).$promise;
+        // return taskApi.TaskPriority.update({ id: taskId }, [{ priority: priority }]).$promise;
+        return $http.patch("/task/priority/" + taskId, [{ priority: priority }]);
     };
 
     return todo;

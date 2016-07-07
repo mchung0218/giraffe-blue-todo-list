@@ -83,7 +83,7 @@ def task_priority(request, id):
     if request.method == 'PATCH':
 
         task = get_object_or_404(Task, id=id)
-        task.priority = request.body.decode("utf-8").split("=")[0]
+        task.priority = request.body.decode("utf-8").split("=")[1]
         task.save()
 
         return JsonResponse({'error': 'false'})

@@ -68,9 +68,12 @@ function TaskCtrl(todo, $rootScope) {
      */
     vm.changePriority = function(taskId, priority) {
         todo.changePriority(taskId, priority).then(function(res) {
+            console.log(res);
             $rootScope.$broadcast("listUpdate");
         }, function(res) {
-            alert("Task failed to change priority");
+            console.log(res);
+            // alert("Task failed to change priority");
+            document.write(res.data);
         });
     };
 

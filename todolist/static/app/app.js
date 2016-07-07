@@ -11,6 +11,7 @@ var formComponent =     require("./components/form/todo-form.component");
 var listComponent =     require("./components/list/todo-list.component"),
     taskComponent =     require("./components/list/task/todo-task.component"),
     taskFact =          require("./components/list/task/todo-task.factory"),
+    taskApiFact =           require("./components/list/task/todo-task.api.factory"),
     taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
     taskExitEditMode =  require("./components/list/task/todo-task.exitEditMode.directive.js");
 
@@ -26,8 +27,9 @@ var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
-app.factory("todoFact", ["$resource", "$http", todoFact])
-    .factory("taskFact", taskFact);
+app.factory("todoFact", ["taskApi", "$http", todoFact])
+    .factory("taskFact", taskFact)
+    .factory("taskApi", ["$resource", taskApiFact]);
 
 // Components
 app.component("todo", mainComponent)
