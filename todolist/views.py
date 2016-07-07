@@ -47,12 +47,13 @@ def task(request, id):
     # Update task
     elif request.method == 'PATCH':
         try:
-        	task = get_object_or_404(Task, id=id)
-        	body_unicode = request.body.decode('utf-8')
-		body = json.loads(body_unicode)
-		task.text = body["text"]
-        	task.save()
-        return JsonResponse({'error': 'false'})
+            task = get_object_or_404(Task, id=id)
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            task.text = body["text"]
+            task.save()
+
+            return JsonResponse({'error': 'false'})
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
 
@@ -89,7 +90,7 @@ def task_priority(request, id):
     if request.method == 'PATCH':
         try:
             task = get_object_or_404(Task, id=id)
-            task.priority = create_json(request.body)["priority"]
+            task.priority = json.loads(request.body.decode("utf-8"))["priority"]
             task.save()
 
             return JsonResponse({'error': 'false'})
@@ -110,18 +111,3 @@ def tasks(request):
             tasks_json["tasks"].append(task_json)
 
         return JsonResponse(tasks_json)
-
-
-
-### Functions ###
-
-# Create a json/dict object from byte string
-def create_json(task_info):
-    task_info = task_info.decode("utf-8").split("&")
-
-    json_obj = {}
-    for info in task_info:
-        info_ele = info.split("=")
-        json_obj[info_ele[0]] = info_ele[1]
-
-    return json_obj
