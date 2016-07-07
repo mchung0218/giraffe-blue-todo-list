@@ -29,7 +29,6 @@ def task(request, id):
 
     # Add task
     if request.method == 'POST':
-
         try:
             new_task = Task(text=request.POST["text"],
                             priority=request.POST["priority"],
