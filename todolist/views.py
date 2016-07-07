@@ -35,7 +35,11 @@ def task(request, id):
                             completed=0)
             new_task.save()
 
-            return JsonResponse({'error': 'false'})
+            task = {"text": request.POST["text"],
+                    "priority": request.POST["priority"],
+                    "completed": 0,
+                    "id": new_task.id}
+            return JsonResponse({'error': 'false', 'task': task})
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
 
