@@ -15,6 +15,11 @@ function httpConfig($httpProvider, $resourceProvider) {
 
     // Do not strip trailing slashes (e.g. /task/)
     $resourceProvider.defaults.stripTrailingSlashes = false;
+
+    // Enable PATCH action
+    $httpProvider.defaults.headers.patch = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    };
 }
 
 module.exports = httpConfig;
@@ -48,7 +53,7 @@ var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
-app.factory("todoFact", ["$resource", todoFact])
+app.factory("todoFact", ["$resource", "$http", todoFact])
     .factory("taskFact", taskFact);
 
 // Components
@@ -195,13 +200,57 @@ function TaskCtrl(todo, $rootScope) {
     };
 
     /**
+     * editTask()
+     * Edits the task.
+     * @param taskId: The task id number.
+     * @param name: The new task name to update to.
+     */
+    vm.editTask = function(taskId, name) {
+        console.log(name);
+
+        if (name.length > 0) {
+            todo.editTask(taskId, name).then(function(res) {
+                console.log(res);
+                // If successful, update view.
+                $rootScope.$broadcast("listUpdate");
+
+            }, function(res) {
+                vm.task.text = vm.prevName;
+                document.write(res.data);
+                alert("Task failed to update its name.");
+            });
+        }
+
+        else {
+            vm.task.text = vm.prevName;
+        }
+    };
+
+    /**
      * changePriority()
      * Changes the priority of the task.
      * @param taskId: The task id number.
-     * @param priority: The priority level as a number (see the Task object for the details).
+     * @param priority: The priority level to change to.
      */
     vm.changePriority = function(taskId, priority) {
-        todo.changePriority(taskId, priority);
+        todo.changePriority(taskId, priority).then(function(res) {
+            $rootScope.$broadcast("listUpdate");
+        }, function(res) {
+            alert("Task failed to change priority");
+        });
+    };
+
+    /**
+     * markCompleted()
+     * Mark task completed.
+     * @param taskId: The task id number.
+     */
+    vm.markCompleted = function(taskId) {
+        todo.markCompleted(taskId).then(function(res) {
+            $rootScope.$broadcast("listUpdate");
+        }, function(res) {
+            alert("Task failed to mark completed");
+        });
     };
 }
 
@@ -369,7 +418,7 @@ module.exports = {
  * todoFactory()
  * Todo factory containing all operations.
  */
-function todoFactory($resource) {
+function todoFactory($resource, $http) {
     var todo = {};
 
     /**
@@ -446,9 +495,42 @@ function todoFactory($resource) {
      * @param name: The task name to change to.
      */
     todo.editTask = function(taskId, name) {
-        var taskResource = $resource("/task/:id", { id: taskId });
+        // var taskResource = $resource("/task/:id", { id: taskId, text: name }, {
+        //     update: {
+        //         "method": "PATCH"
+        //     }
+        // });
 
-        return taskResource.delete({ id: taskId }).$promise;
+        // // taskResource.prototype.$save = function() {
+        // //     if ( !this.id ) {
+        // //         return this.$create();
+        // //     }
+        // //     else {
+        // //         return this.$update();
+        // //     }
+        // // };
+
+        // console.log(taskResource);
+        // return taskResource.update({ id: taskId, text: name }).$promise;
+        return $http.patch("/task/" + taskId, { id: taskId, text: name }, {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        });
+    };
+
+    /**
+     * markCompleted()
+     * Mark task completed.
+     */
+    todo.markCompleted = function(taskId) {
+        var taskResource = $resource("/task/completed/:id", { id: taskId }, {
+            update: {
+                "method": "PATCH"
+            }
+        });
+
+        return taskResource.update({ id: taskId }).$promise;
     };
 
     /**
@@ -458,9 +540,13 @@ function todoFactory($resource) {
      * @param priority: The priority to change to for the task.
      */
     todo.changePriority = function(taskId, priority) {
-        var task = todo.getTask(taskId);
-        
-        task.object.changePriority(priority);
+        var taskResource = $resource("/task/priority/:id", { id: taskId }, {
+            update: {
+                "method": "PATCH"
+            }
+        });
+
+        return taskResource.update(priority).$promise;
     };
 
     return todo;

@@ -26,7 +26,7 @@ var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
-app.factory("todoFact", ["$resource", todoFact])
+app.factory("todoFact", ["$resource", "$http", todoFact])
     .factory("taskFact", taskFact);
 
 // Components

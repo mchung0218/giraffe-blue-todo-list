@@ -4,7 +4,7 @@
  * todoFactory()
  * Todo factory containing all operations.
  */
-function todoFactory($resource) {
+function todoFactory($resource, $http) {
     var todo = {};
 
     /**
@@ -81,9 +81,42 @@ function todoFactory($resource) {
      * @param name: The task name to change to.
      */
     todo.editTask = function(taskId, name) {
-        var taskResource = $resource("/task/:id", { id: taskId });
+        // var taskResource = $resource("/task/:id", { id: taskId, text: name }, {
+        //     update: {
+        //         "method": "PATCH"
+        //     }
+        // });
 
-        return taskResource.delete({ id: taskId }).$promise;
+        // // taskResource.prototype.$save = function() {
+        // //     if ( !this.id ) {
+        // //         return this.$create();
+        // //     }
+        // //     else {
+        // //         return this.$update();
+        // //     }
+        // // };
+
+        // console.log(taskResource);
+        // return taskResource.update({ id: taskId, text: name }).$promise;
+        return $http.patch("/task/" + taskId, { id: taskId, text: name }, {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        });
+    };
+
+    /**
+     * markCompleted()
+     * Mark task completed.
+     */
+    todo.markCompleted = function(taskId) {
+        var taskResource = $resource("/task/completed/:id", { id: taskId }, {
+            update: {
+                "method": "PATCH"
+            }
+        });
+
+        return taskResource.update({ id: taskId }).$promise;
     };
 
     /**
@@ -93,9 +126,13 @@ function todoFactory($resource) {
      * @param priority: The priority to change to for the task.
      */
     todo.changePriority = function(taskId, priority) {
-        var task = todo.getTask(taskId);
-        
-        task.object.changePriority(priority);
+        var taskResource = $resource("/task/priority/:id", { id: taskId }, {
+            update: {
+                "method": "PATCH"
+            }
+        });
+
+        return taskResource.update(priority).$promise;
     };
 
     return todo;
