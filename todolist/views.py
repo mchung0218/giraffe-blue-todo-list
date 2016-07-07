@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.template.context_processors import csrf
 from todolist.models import Task
 from .forms import *
+import json
 
 
 # FOR TESTING ONLY
@@ -28,52 +29,58 @@ def task(request, id):
 
     # Add task
     if request.method == 'POST':
-        print(request.POST)
+        try:
+            new_task = Task(text=request.POST["text"],
+                            priority=request.POST["priority"],
+                            completed=0)
+            new_task.save()
 
-        new_task = Task(text=request.POST["text"],
-                        priority=request.POST["priority"],
-                        completed=0)
-        new_task.save()
+            task = {"text": request.POST["text"],
+                    "priority": request.POST["priority"],
+                    "completed": 0,
+                    "id": new_task.id}
 
-        return JsonResponse({'error': 'false'})
+            return JsonResponse({'error': 'false', 'task': task})
+        except Exception as e:
+            return JsonResponse({'error': 'true', 'errorMessage': e})
 
     # Update task
     elif request.method == 'PATCH':
-        return task_update(request, id)
+        try:
+            task = get_object_or_404(Task, id=id)
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            task.text = body["text"]
+            task.save()
+
+            return JsonResponse({'error': 'false'})
+        except Exception as e:
+            return JsonResponse({'error': 'true', 'errorMessage': e})
 
     # Delete task
     elif request.method == 'DELETE':
-        return task_delete(request, id)
+        try:
+            task = get_object_or_404(Task, id=id)
+            task.delete()
 
+            return JsonResponse({'error': 'false'})
+        except Exception as e:
+            return JsonResponse({'error': 'true', 'errorMessage': e})
 
-def task_update(request, id):
-    try:
-        task = get_object_or_404(Task, id=id)
-        task.text = request.POST["text"]
-        task.save()
-        return JsonResponse({'error': 'false'})
-    except:
-        return JsonResponse({'error': 'true'})	
-
-def task_delete(request, id):
-    try:
-        task = get_object_or_404(Task, id=id)
-        task.delete()
-        return JsonResponse({'error': 'false'})
-    except:
-        return JsonResponse({'error': 'true'})
 
 # /task/completed/{id}
 def task_completed(request, id):
 
     # Mark as completed
     if request.method == 'PATCH':
+        try:
+            task = get_object_or_404(Task, id=id)
+            task.completed = 1
+            task.save()
 
-        task = get_object_or_404(Task, id=id)
-        task.completed = 1
-        task.save()
-
-        return JsonResponse({'error': 'false'})
+            return JsonResponse({'error': 'false'})
+        except Exception as e:
+            return JsonResponse({'error': 'true', 'errorMessage': e})
 
 
 # /task/priority/{id}
@@ -81,12 +88,14 @@ def task_priority(request, id):
 
     # Set priority
     if request.method == 'PATCH':
+        try:
+            task = get_object_or_404(Task, id=id)
+            task.priority = json.loads(request.body.decode("utf-8"))["priority"]
+            task.save()
 
-        task = get_object_or_404(Task, id=id)
-        task.priority = request.body.decode("utf-8").split("=")[1]
-        task.save()
-
-        return JsonResponse({'error': 'false'})
+            return JsonResponse({'error': 'false'})
+        except Exception as e:
+            return JsonResponse({'error': 'true', 'errorMessage': e})
 
 
 # /tasks
