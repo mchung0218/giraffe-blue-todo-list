@@ -39,6 +39,7 @@ def task(request, id):
                     "priority": request.POST["priority"],
                     "completed": 0,
                     "id": new_task.id}
+
             return JsonResponse({'error': 'false', 'task': task})
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
@@ -63,26 +64,6 @@ def task(request, id):
             return JsonResponse({'error': 'false'})
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
-
-
-def task_update(request, id):
-    try:
-        task = get_object_or_404(Task, id=id)
-        task.text = request.POST["text"]
-        task.save()
-
-        return JsonResponse({'error': 'false'})
-    except Exception as e:
-        return JsonResponse({'error': 'true', 'errorMessage': e})
-
-def task_delete(request, id):
-    try:
-        task = get_object_or_404(Task, id=id)
-        task.delete()
-
-        return JsonResponse({'error': 'false'})
-    except Exception as e:
-        return JsonResponse({'error': 'true', 'errorMessage': e})
 
 
 # /task/completed/{id}
