@@ -103,7 +103,7 @@ def tasks(request):
 
     # Get all tasks
     if request.method == 'GET':
-        tasks = Task.objects.all()
+        tasks = Task.objects.all().order_by("id")
         tasks_json = {"tasks": []}
         for task in tasks:
             task_json = {"text": task.text, "priority": task.priority,
