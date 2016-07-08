@@ -90,6 +90,10 @@ def task_priority(request, id):
     if request.method == 'PATCH':
         try:
             task = get_object_or_404(Task, id=id)
+
+            if task.completed:
+                task.completed = 0
+
             task.priority = json.loads(request.body.decode("utf-8"))["priority"]
             task.save()
 
