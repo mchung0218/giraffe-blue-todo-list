@@ -15,8 +15,8 @@ function ListCtrl(todo, todoList) {
     // Get task list
     vm.getTaskList = function() {
         todo.getTaskList().then(function(response) {
-            // Once the list is retrieved from the server, convert them to Task client side objects
-            todoList.convertToTaskObjs(response.tasks);
+            // Once the list is retrieved from the server, copy it to the client side
+            todoList.copyServerList(response.tasks);
 
             // Update model
             vm.taskList = todoList.taskList;

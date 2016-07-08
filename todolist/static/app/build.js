@@ -33,7 +33,6 @@ var formComponent =     require("./components/form/todo-form.component");
 var listComponent =     require("./components/list/todo-list.component"),
     listFact =          require("./components/list/todo-list.factory"),
     taskComponent =     require("./components/list/task/todo-task.component"),
-    taskFact =          require("./components/list/task/todo-task.factory"),
     taskApiFact =       require("./components/list/task/todo-task.api.factory"),
     taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
     taskExitEditMode =  require("./components/list/task/todo-task.exitEditMode.directive.js");
@@ -51,8 +50,7 @@ app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
 app.factory("todoFact", ["taskApi", todoFact])
-    .factory("listFact", ["taskFact", listFact])
-    .factory("taskFact", taskFact)
+    .factory("listFact", listFact)
     .factory("taskApi", ["$resource", taskApiFact]);
 
 // Components
@@ -68,7 +66,7 @@ app.component("todo", mainComponent)
 app.directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.api.factory":7,"./components/list/task/todo-task.component":8,"./components/list/task/todo-task.enterEditMode.directive.js":9,"./components/list/task/todo-task.exitEditMode.directive.js":10,"./components/list/task/todo-task.factory":11,"./components/list/todo-list.component":12,"./components/list/todo-list.factory":13,"./components/todo.component":14,"./components/todo.factory":15}],3:[function(require,module,exports){
+},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.api.factory":7,"./components/list/task/todo-task.component":8,"./components/list/task/todo-task.enterEditMode.directive.js":9,"./components/list/task/todo-task.exitEditMode.directive.js":10,"./components/list/todo-list.component":11,"./components/list/todo-list.factory":12,"./components/todo.component":13,"./components/todo.factory":14}],3:[function(require,module,exports){
 "use strict";
 
 /**
@@ -373,47 +371,6 @@ module.exports = exitEditMode;
 "use strict";
 
 /**
- * Task()
- * Task object.
- * @param text: Name of task.
- * @param id: Task id.
- * @param priority: The priority level.
- * @param completed: Whether task is completed or not (0 or 1).
- */
-function Task(text, id, priority, completed) {
-    this.text = text;
-    this.id = id;
-    this.priority = priority;
-    this.completed = completed;
-}
-
-/**
- * Task.prototype.changePriority()
- * Changes the priority level of the task.
- * @param priority: The new priority level.
- */
-Task.prototype.changePriority = function(priority) {
-    this.priority = priority;
-};
-
-/**
- * Task.prototype.editName()
- * Changes the task name.
- * @param name: The new name.
- */
-Task.prototype.editName = function(text) {
-    this.text = text;
-};
-
-// Exports
-module.exports = function() {
-    return Task;
-};
-
-},{}],12:[function(require,module,exports){
-"use strict";
-
-/**
  * ListCtrl()
  * Controller for list.
  * @param todo: The todo factory.
@@ -428,8 +385,8 @@ function ListCtrl(todo, todoList) {
     // Get task list
     vm.getTaskList = function() {
         todo.getTaskList().then(function(response) {
-            // Once the list is retrieved from the server, convert them to Task client side objects
-            todoList.convertToTaskObjs(response.tasks);
+            // Once the list is retrieved from the server, copy it to the client side
+            todoList.copyServerList(response.tasks);
 
             // Update model
             vm.taskList = todoList.taskList;
@@ -446,37 +403,27 @@ module.exports = {
     templateUrl: "/static/app/components/list/todo-list.html"
 };
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 /**
 * todoListFactory()
 * A factory for managing todo-list (on the client side).
-* @param Task: The Task object.
 * @return todoList: The todoList object.
 */
-function todoListFactory(Task) {
+function todoListFactory() {
     var todoList = {};
 
+    // Array of tasks
     todoList.taskList = [];
 
     /**
-     * convertToTaskObjs()
-     * Converts the entire list to Task objects.
+     * copyServerList()
+     * Copies the server list.
      * @param serverTaskList: The server's task list.
      */
-    todoList.convertToTaskObjs = function(serverTaskList) {
-        todoList.taskList = serverTaskList.map(function(oldObj) {
-
-            var taskObj = Object.create(Task.prototype, {
-                text: { value: oldObj.text, writable: true },
-                id: { value: oldObj.id, writable: true },
-                priority: { value: oldObj.priority, writable: true },
-                completed: { value: oldObj.completed, writable: true }
-            });
-
-            return taskObj;
-        });
+    todoList.copyServerList = function(serverTaskList) {
+        todoList.taskList = serverTaskList;
     };
 
     /**
@@ -502,15 +449,10 @@ function todoListFactory(Task) {
     /**
      * addTask()
      * Adds a task and puts it to the list.
-     * @param params: Parameters for the task ({ text, id, priority, completed }).
+     * @param newTask: The new task object.
      */
-    todoList.addTask = function(params) {
-        todoList.taskList.push(Object.create(Task.prototype, {
-            text: { value: params.text, writable: true },
-            id: { value: params.id, writable: true },
-            priority: { value: params.priority, writable: true },
-            completed: { value: params.completed, writable: true }
-        }));
+    todoList.addTask = function(newTask) {
+        todoList.taskList.push(newTask);
     };
 
     /**
@@ -564,7 +506,7 @@ function todoListFactory(Task) {
 
 module.exports = todoListFactory;
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 /**
@@ -582,7 +524,7 @@ module.exports = {
     templateUrl: "/static/app/components/todo.html"
 };
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict";
 
 /**

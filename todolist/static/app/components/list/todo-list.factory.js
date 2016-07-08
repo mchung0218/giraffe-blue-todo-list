@@ -3,31 +3,21 @@
 /**
 * todoListFactory()
 * A factory for managing todo-list (on the client side).
-* @param Task: The Task object.
 * @return todoList: The todoList object.
 */
-function todoListFactory(Task) {
+function todoListFactory() {
     var todoList = {};
 
+    // Array of tasks
     todoList.taskList = [];
 
     /**
-     * convertToTaskObjs()
-     * Converts the entire list to Task objects.
+     * copyServerList()
+     * Copies the server list.
      * @param serverTaskList: The server's task list.
      */
-    todoList.convertToTaskObjs = function(serverTaskList) {
-        todoList.taskList = serverTaskList.map(function(oldObj) {
-
-            var taskObj = Object.create(Task.prototype, {
-                text: { value: oldObj.text, writable: true },
-                id: { value: oldObj.id, writable: true },
-                priority: { value: oldObj.priority, writable: true },
-                completed: { value: oldObj.completed, writable: true }
-            });
-
-            return taskObj;
-        });
+    todoList.copyServerList = function(serverTaskList) {
+        todoList.taskList = serverTaskList;
     };
 
     /**
@@ -53,15 +43,10 @@ function todoListFactory(Task) {
     /**
      * addTask()
      * Adds a task and puts it to the list.
-     * @param params: Parameters for the task ({ text, id, priority, completed }).
+     * @param newTask: The new task object.
      */
-    todoList.addTask = function(params) {
-        todoList.taskList.push(Object.create(Task.prototype, {
-            text: { value: params.text, writable: true },
-            id: { value: params.id, writable: true },
-            priority: { value: params.priority, writable: true },
-            completed: { value: params.completed, writable: true }
-        }));
+    todoList.addTask = function(newTask) {
+        todoList.taskList.push(newTask);
     };
 
     /**
