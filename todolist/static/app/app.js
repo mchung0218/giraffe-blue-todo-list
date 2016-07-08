@@ -9,8 +9,9 @@ var mainComponent =     require("./components/todo.component"),
 var formComponent =     require("./components/form/todo-form.component");
 
 var listComponent =     require("./components/list/todo-list.component"),
+    listFact =          require("./components/list/todo-list.factory"),
     taskComponent =     require("./components/list/task/todo-task.component"),
-    taskFact =          require("./components/list/task/todo-task.factory"),
+    taskApiFact =       require("./components/list/task/todo-task.api.factory"),
     taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
     taskExitEditMode =  require("./components/list/task/todo-task.exitEditMode.directive.js");
 
@@ -20,14 +21,15 @@ var footerComponent =   require("./components/footer/todo-footer.component"),
 
 
 // App module
-var app = angular.module("todo", ["ngAnimate"]);
+var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 
 // Configurations
-app.config(["$httpProvider", httpConfig]);
+app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
 // Services/factories
-app.factory("todoFact", ["taskFact", todoFact])
-    .factory("taskFact", taskFact);
+app.factory("todoFact", ["taskApi", todoFact])
+    .factory("listFact", listFact)
+    .factory("taskApi", ["$resource", taskApiFact]);
 
 // Components
 app.component("todo", mainComponent)

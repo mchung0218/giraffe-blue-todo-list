@@ -5,11 +5,8 @@
  * The todo-form controller (input box).
  * @param todo: The todo object.
  */
-function FormCtrl(todo) {
+function FormCtrl(todo, todoList) {
     var vm = this;
-
-    // Use this to assign task id numbers
-    var taskNum = 1;
 
     /**
      * submit()
@@ -18,19 +15,25 @@ function FormCtrl(todo) {
     vm.submit = function() {
         // Take the form data, put it as an object
         var formData = {
-            "name": vm.form.taskName,
-            "id": taskNum
+            "text": vm.form.taskName,
+            "priority": "low"
         };
 
         // Add the task
-        todo.addTask(formData);
+        todo.addTask(formData).then(function(res) {
+            // Add it to the client side list
+            var newTask = res.task;
 
-        taskNum++;
+            todoList.addTask(newTask);
+            
+        }, function(res) {
+            alert("Failed to add task.");
+        });
     };
 }
 
 // Exports
 module.exports = {
-    controller: ["todoFact", FormCtrl],
+    controller: ["todoFact", "listFact", FormCtrl],
     templateUrl: "/static/app/components/form/todo-form.html"
 };
