@@ -14,11 +14,6 @@ function httpConfig($httpProvider, $resourceProvider) {
 
     // Do not strip trailing slashes (e.g. /task/)
     $resourceProvider.defaults.stripTrailingSlashes = false;
-
-    // Enable PATCH action
-    // $httpProvider.defaults.headers.patch = {
-    //     "Content-Type": "application/json-patch+json"
-    // };
 }
 
 module.exports = httpConfig;

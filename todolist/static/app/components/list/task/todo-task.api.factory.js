@@ -23,6 +23,10 @@ function taskApi($resource) {
                     }
                     return str.join("&");
                 }
+            },
+
+            update: {
+                "method": "PATCH",
             }
         }),
 

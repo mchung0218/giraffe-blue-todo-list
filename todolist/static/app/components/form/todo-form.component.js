@@ -5,7 +5,7 @@
  * The todo-form controller (input box).
  * @param todo: The todo object.
  */
-function FormCtrl(todo, $rootScope) {
+function FormCtrl(todo, todoList) {
     var vm = this;
 
     /**
@@ -21,9 +21,11 @@ function FormCtrl(todo, $rootScope) {
 
         // Add the task
         todo.addTask(formData).then(function(res) {
-            // If successful, update the list.
-            $rootScope.$broadcast("listUpdate");
+            // Add it to the client side list
+            var newTask = res.task;
 
+            todoList.addTask(newTask);
+            
         }, function(res) {
             alert("Failed to add task.");
         });
@@ -32,6 +34,6 @@ function FormCtrl(todo, $rootScope) {
 
 // Exports
 module.exports = {
-    controller: ["todoFact", "$rootScope", FormCtrl],
+    controller: ["todoFact", "listFact", FormCtrl],
     templateUrl: "/static/app/components/form/todo-form.html"
 };

@@ -4,24 +4,24 @@
  * ListCtrl()
  * Controller for list.
  * @param todo: The todo factory.
+ * @param todoList: The todo-list factory.
  */
-function ListCtrl(todo, $rootScope) {
+function ListCtrl(todo, todoList) {
     var vm = this;
 
     // List of tasks
-    vm.taskList = [];
+    vm.taskList = todoList.taskList;
 
     // Get task list
     vm.getTaskList = function() {
         todo.getTaskList().then(function(response) {
-            vm.taskList = response.tasks;
+            // Once the list is retrieved from the server, convert them to Task client side objects
+            todoList.convertToTaskObjs(response.tasks);
+
+            // Update model
+            vm.taskList = todoList.taskList;
         });
     };
-
-    // Create a listener where whenever tasks get deleted or added, the list should get updated.
-    $rootScope.$on("listUpdate", function() {
-        vm.getTaskList();
-    });
 
     // Initial execution
     vm.getTaskList();
@@ -29,6 +29,6 @@ function ListCtrl(todo, $rootScope) {
 
 // Exports
 module.exports = {
-    controller: ["todoFact", "$rootScope", ListCtrl],
+    controller: ["todoFact", "listFact", ListCtrl],
     templateUrl: "/static/app/components/list/todo-list.html"
 };

@@ -3,26 +3,24 @@
 /**
  * Task()
  * Task object.
- * @param name: Name of task.
- * @param number: Task number.
+ * @param text: Name of task.
+ * @param id: Task id.
+ * @param priority: The priority level.
+ * @param completed: Whether task is completed or not (0 or 1).
  */
-function Task(name, id) {
-    this.name = name;
+function Task(text, id, priority, completed) {
+    this.text = text;
     this.id = id;
-    this.priority = 1;  // Default: Low priority
+    this.priority = priority;
+    this.completed = completed;
 }
 
 /**
  * Task.prototype.changePriority()
  * Changes the priority level of the task.
- * @param priority: The new priority level as a number.
+ * @param priority: The new priority level.
  */
 Task.prototype.changePriority = function(priority) {
-    // Priority levels
-    // 0 = completed
-    // 1 = low
-    // 2 = moderate
-    // 3 = important
     this.priority = priority;
 };
 
@@ -31,10 +29,9 @@ Task.prototype.changePriority = function(priority) {
  * Changes the task name.
  * @param name: The new name.
  */
-Task.prototype.editName = function(name) {
-    this.name = name;
+Task.prototype.editName = function(text) {
+    this.text = text;
 };
-
 
 // Exports
 module.exports = function() {
