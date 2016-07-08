@@ -3,7 +3,8 @@
 /**
  * FormCtrl()
  * The todo-form controller (input box).
- * @param todo: The todo object.
+ * @param todo: The todo factory.
+ * @param todoList: The todo-list factory. 
  */
 function FormCtrl(todo, todoList) {
     var vm = this;

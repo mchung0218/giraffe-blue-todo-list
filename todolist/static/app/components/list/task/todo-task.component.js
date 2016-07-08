@@ -3,7 +3,8 @@
 /**
  * TaskCtrl()
  * The todo-task controller.
- * @param todo: Todo factory.
+ * @param todo: The todo factory.
+ * @param todoList: The todo-list factory.
  */
 function TaskCtrl(todo, todoList) {
     var vm = this;
