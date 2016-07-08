@@ -82,6 +82,10 @@ function todoListFactory() {
         var task = todoList.getTask(taskId);
 
         todoList.taskList[task.index].priority = priority;
+
+        if (task.object.completed === 1) {
+            todoList.taskList[task.index].completed = 0;
+        }
     };
 
     /**

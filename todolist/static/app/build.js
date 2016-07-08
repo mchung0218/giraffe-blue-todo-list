@@ -127,7 +127,8 @@ module.exports = {
 /**
  * FormCtrl()
  * The todo-form controller (input box).
- * @param todo: The todo object.
+ * @param todo: The todo factory.
+ * @param todoList: The todo-list factory. 
  */
 function FormCtrl(todo, todoList) {
     var vm = this;
@@ -149,6 +150,7 @@ function FormCtrl(todo, todoList) {
             var newTask = res.task;
 
             todoList.addTask(newTask);
+            
         }, function(res) {
             alert("Failed to add task.");
         });
@@ -218,7 +220,8 @@ module.exports = taskApi;
 /**
  * TaskCtrl()
  * The todo-task controller.
- * @param todo: Todo factory.
+ * @param todo: The todo factory.
+ * @param todoList: The todo-list factory.
  */
 function TaskCtrl(todo, todoList) {
     var vm = this;
@@ -286,7 +289,6 @@ function TaskCtrl(todo, todoList) {
         todo.changePriority(taskId, priority).then(function(res) {
             // If successful, update the list view.
             todoList.changePriority(taskId, priority);
-
         }, function(res) {
             alert("Task failed to change priority.");
         });
@@ -501,6 +503,10 @@ function todoListFactory() {
         var task = todoList.getTask(taskId);
 
         todoList.taskList[task.index].priority = priority;
+
+        if (task.object.completed === 1) {
+            todoList.taskList[task.index].completed = 0;
+        }
     };
 
     /**
