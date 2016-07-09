@@ -109,7 +109,7 @@ def tasks(request):
 
     # Get all tasks
     if request.method == 'GET':
-        tasks = Task.objects.all().order_by("id")
+        tasks = Task.objects.filter(owner=request.user).order_by("id")
         tasks_json = {"tasks": []}
         for task in tasks:
             task_json = {"text": task.text, "priority": task.priority,
@@ -117,6 +117,7 @@ def tasks(request):
             tasks_json["tasks"].append(task_json)
 
         return JsonResponse(tasks_json)
+
 
 # /user/create
 def user_create(request):
