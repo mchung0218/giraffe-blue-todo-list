@@ -49,13 +49,13 @@ def task(request, id):
     # Update task
     elif request.method == 'PATCH':
         try:
-        	task = get_object_or_404(Task, id=id)
-        	body_unicode = request.body.decode('utf-8')
-		body = json.loads(body_unicode)
-		task.text = body["text"]
-        	task.save()
+            task = get_object_or_404(Task, id=id)
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            task.text = body["text"]
+            task.save()
 
-		return JsonResponse({'error': 'false'})
+            return JsonResponse({'error': 'false'})
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
 
@@ -141,7 +141,7 @@ def user_create(request):
 def user_logout(request):
     try:
         auth.logout(request)
-        return JsonResponse{'error': 'false'}
+        return JsonResponse({'error': 'false'})
     except Exception as e:
-        return JsonResponse{'error': 'true',
-                            'errorMessage': 'Could not logout: ' + e}
+        return JsonResponse({'error': 'true',
+                            'errorMessage': 'Could not logout: ' + e})
