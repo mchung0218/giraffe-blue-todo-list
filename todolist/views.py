@@ -4,7 +4,7 @@ from django.template.context_processors import csrf
 from todolist.models import Task
 from .forms import *
 import json
-
+from django.contrib.auth.models import User
 
 # FOR TESTING ONLY
 def testUpdate(request):
@@ -52,7 +52,8 @@ def task(request, id):
 		body = json.loads(body_unicode)
 		task.text = body["text"]
         	task.save()
-        return JsonResponse({'error': 'false'})
+
+		return JsonResponse({'error': 'false'})
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
 
@@ -111,6 +112,23 @@ def tasks(request):
 
         return JsonResponse(tasks_json)
 
+#/user/create
+def user_create(request):
+	if request.method == 'POST':
+		try:
+        		body_unicode = request.body.decode('utf-8')
+			body = json.loads(body_unicode)
+			username = body["username"]
+			email = body["email"]
+			password = body["password"]
+			user = User.objects.create_user(username, email, password)
+			return JsonResponse({'error': 'false'})
+        	except Exception as e:
+            		#return JsonResponse({'error': 'true', 'errorMessage': e})
+			return(request.POST)
+	else:
+		return JsonResponse({'error': 'true', 'errorMessage': 'Expected POST request. Recieved method: ' + request.method })
+
 
 
 ### Functions ###
@@ -125,3 +143,5 @@ def create_json(task_info):
         json_obj[info_ele[0]] = info_ele[1]
 
     return json_obj
+
+
