@@ -1,0 +1,69 @@
+@import "../../utils/extends";
+
+// Login form
+.login-form {
+    // Inner area
+    &-inner {
+        border:2px solid $gray-dark;
+    }
+
+    // Error message
+    &__error {
+        padding:15px;
+
+        color:$red;
+        text-align:center;
+        font-weight:300;
+
+        &-text {
+            display:block;
+        }
+    }
+
+    // Input boxes
+    &__input {
+        @extend %input;
+
+        &:not(:first-child) {
+            border-top:2px solid $gray-dark;
+        }
+
+        &::-webkit-input-placeholder {
+            font-style:normal;
+            color:$gray-dark;
+        }
+
+        &::-moz-placeholder {
+            font-style:normal;
+            color:$gray-dark;
+        }
+
+        &:-ms-input-placeholder { 
+            font-style:normal;
+            color:$gray-dark;
+        }
+
+        &:-moz-placeholder {
+            font-style:normal;
+            color:$gray-dark;
+        }
+    }
+
+    // Submit buttons
+    &__submit {
+        float:left;
+
+        width:50%;
+        padding:15px;
+
+        border:2px solid $gray-dark;
+
+        color:#FFF;
+
+        background-color:$gray-core;
+
+        &:hover {
+            background-color:$black;
+        }
+    }
+}

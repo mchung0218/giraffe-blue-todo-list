@@ -1,9 +1,14 @@
 "use strict";
 
 // Requires
-var httpConfig =        require("./app.config");
+var httpConfig =        require("./app.config"),
+    routesConfig =      require("./app.routes");
 
-var mainComponent =     require("./todo/todo.component"),
+// Login components
+var loginComponent =    require("./login/login.component");
+
+// Todo components
+var todoComponent =     require("./todo/todo.component"),
     todoFact =          require("./todo/todo.factory");
 
 var formComponent =     require("./todo/form/todo-form.component");
@@ -23,10 +28,11 @@ var footerComponent =   require("./todo/footer/todo-footer.component"),
 
 
 // App module
-var app = angular.module("todo", ["ngAnimate", "ngResource"]);
+var app = angular.module("todo", ["ui.router", "ngAnimate", "ngResource"]);
 
 // Configurations
-app.config(["$httpProvider", "$resourceProvider", httpConfig]);
+app.config(["$httpProvider", "$resourceProvider", httpConfig])
+    .config(["$stateProvider", "$urlRouterProvider", routesConfig]);
 
 // Filters
 app.filter("priority", listFilter);
@@ -38,7 +44,8 @@ app.factory("todoFact", ["taskApi", todoFact])
     .factory("filterFact", filterFact);
 
 // Components
-app.component("todo", mainComponent)
+app.component("login", loginComponent)
+    .component("todo", todoComponent)
     .component("todoForm", formComponent)
     .component("todoList", listComponent)
     .component("todoTask", taskComponent)

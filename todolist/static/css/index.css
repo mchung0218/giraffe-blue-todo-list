@@ -58,11 +58,14 @@ main {
   border: 2px solid #d1d2d4;
 }
 
-.todo-form__label, .todo-form__input, .todo-list__task, .todo-list__task-option-level, .todo-footer__filter-menu-option {
-  display: block;
+.todo-list, .todo-list__task-option, .todo-footer__filter-menu {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
-.todo-form__input, .todo-list__task, .todo-list__task-option-level, .todo-footer__filter-menu-option {
+.todo-form__input, .todo-list__task, .todo-list__task-option-level, .todo-footer__filter-menu-option, .login-form__input {
+  display: block;
   width: 100%;
   padding: 15px;
   border: 0;
@@ -70,10 +73,8 @@ main {
   background-color: #f1f1f2;
 }
 
-.todo-list, .todo-list__task-option, .todo-footer__filter-menu {
-  padding: 0;
-  margin: 0;
-  list-style: none;
+.todo-form__label, .todo-form__input, .todo-list__task, .todo-list__task-option-level, .todo-footer__filter-menu-option {
+  display: block;
 }
 
 .todo-list__task {
@@ -250,4 +251,56 @@ main {
 
 .todo-footer__filter-menu-option {
   text-align: center;
+}
+
+.login-form-inner {
+  border: 2px solid #d1d2d4;
+}
+
+.login-form__error {
+  padding: 15px;
+  color: #eb3e30;
+  text-align: center;
+  font-weight: 300;
+}
+
+.login-form__error-text {
+  display: block;
+}
+
+.login-form__input:not(:first-child) {
+  border-top: 2px solid #d1d2d4;
+}
+
+.login-form__input::-webkit-input-placeholder {
+  font-style: normal;
+  color: #d1d2d4;
+}
+
+.login-form__input::-moz-placeholder {
+  font-style: normal;
+  color: #d1d2d4;
+}
+
+.login-form__input:-ms-input-placeholder {
+  font-style: normal;
+  color: #d1d2d4;
+}
+
+.login-form__input:-moz-placeholder {
+  font-style: normal;
+  color: #d1d2d4;
+}
+
+.login-form__submit {
+  float: left;
+  width: 50%;
+  padding: 15px;
+  border: 2px solid #d1d2d4;
+  color: #FFF;
+  background-color: #979798;
+}
+
+.login-form__submit:hover {
+  background-color: #323232;
 }
