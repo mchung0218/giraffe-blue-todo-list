@@ -49,13 +49,13 @@ def task(request, id):
     # Update task
     elif request.method == 'PATCH':
         try:
-        	task = get_object_or_404(Task, id=id)
-        	body_unicode = request.body.decode('utf-8')
-		body = json.loads(body_unicode)
-		task.text = body["text"]
-        	task.save()
+            task = get_object_or_404(Task, id=id)
+            body_unicode = request.body.decode('utf-8')
+            body = json.loads(body_unicode)
+            task.text = body["text"]
+            task.save()
 
-		return JsonResponse({'error': 'false'})
+            return JsonResponse({'error': 'false'})
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
 
@@ -91,7 +91,7 @@ def task_priority(request, id):
     # Set priority
     if request.method == 'PATCH':
         try:
-            task = get_object_or_404(Task, id=id)
+            task = get_object_or_404(Task, owner=request.user, id=id)
 
             if task.completed:
                 task.completed = 0
@@ -109,7 +109,7 @@ def tasks(request):
 
     # Get all tasks
     if request.method == 'GET':
-        tasks = Task.objects.all().order_by("id")
+        tasks = Task.objects.filter(owner=request.user).order_by("id")
         tasks_json = {"tasks": []}
         for task in tasks:
             task_json = {"text": task.text, "priority": task.priority,
@@ -117,6 +117,7 @@ def tasks(request):
             tasks_json["tasks"].append(task_json)
 
         return JsonResponse(tasks_json)
+
 
 # /user/create
 def user_create(request):
@@ -141,7 +142,7 @@ def user_create(request):
 def user_logout(request):
     try:
         auth.logout(request)
-        return JsonResponse{'error': 'false'}
+        return JsonResponse({'error': 'false'})
     except Exception as e:
-        return JsonResponse{'error': 'true',
-                            'errorMessage': 'Could not logout: ' + e}
+        return JsonResponse({'error': 'true',
+                            'errorMessage': 'Could not logout: ' + e})
