@@ -91,7 +91,7 @@ def task_priority(request, id):
     # Set priority
     if request.method == 'PATCH':
         try:
-            task = get_object_or_404(Task, id=id)
+            task = get_object_or_404(Task, owner=request.user, id=id)
 
             if task.completed:
                 task.completed = 0
