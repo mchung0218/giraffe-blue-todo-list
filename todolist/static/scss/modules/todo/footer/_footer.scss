@@ -1,7 +1,9 @@
 // Todo footer
 .todo-footer {
-    padding:10px;
+    padding:8px 10px;
     height:40px;
+
+    border-top:2px solid $gray-dark;
 
     text-align:left;
     font-size:$font-size-small;

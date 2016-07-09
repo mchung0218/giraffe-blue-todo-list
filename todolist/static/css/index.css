@@ -210,8 +210,9 @@ main {
 }
 
 .todo-footer {
-  padding: 10px;
+  padding: 8px 10px;
   height: 40px;
+  border-top: 2px solid #d1d2d4;
   text-align: left;
   font-size: 0.66667rem;
   font-weight: 300;
