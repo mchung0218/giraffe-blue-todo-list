@@ -5,8 +5,9 @@
  * Controller for list.
  * @param todo: The todo factory.
  * @param todoList: The todo-list factory.
+ * @param todoFilter: The todo-filter factory.
  */
-function ListCtrl(todo, todoList) {
+function ListCtrl(todo, todoList, todoFilter) {
     var vm = this;
 
     // List of tasks
@@ -23,12 +24,17 @@ function ListCtrl(todo, todoList) {
         });
     };
 
+    // Get the filter option
+    vm.listFilter = function() {
+        return todoFilter.option;
+    };
+
     // Initial execution
     vm.getTaskList();
 }
 
 // Exports
 module.exports = {
-    controller: ["todoFact", "listFact", ListCtrl],
+    controller: ["todoFact", "listFact", "filterFact", ListCtrl],
     templateUrl: "/static/app/components/list/todo-list.html"
 };

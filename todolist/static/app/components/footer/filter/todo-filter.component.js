@@ -3,15 +3,30 @@
 /**
  * FilterCtrl()
  * The controller for the filter component.
+ * @param todoFilter: The todo-filter factory.
  */
-function FilterCtrl(todo) {
+function FilterCtrl(todoFilter) {
     var vm = this;
 
-    // 1. Place an ng-class on the <li> task element which would hide the element depending on what the priority number is.
+    // Default menu is closed
+    vm.menuOpen = false;
+
+     // Current filter used
+    vm.currentFilter = todoFilter.getCurrentOption;
+
+    // Change filter
+    vm.changeFilter = function(option) {
+        todoFilter.changeOption(option);
+    };
+
+    // Toggle menu
+    vm.toggleFilterMenu = function() {
+        vm.menuOpen = !vm.menuOpen;
+    };
 }
 
 // Exports
 module.exports = {
-    controller: FilterCtrl,
+    controller: ["filterFact", FilterCtrl],
     templateUrl: "/static/app/components/footer/filter/todo-filter.html"
 };

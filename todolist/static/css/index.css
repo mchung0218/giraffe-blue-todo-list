@@ -234,6 +234,10 @@ main {
   text-align: center;
 }
 
+.todo-footer__filter-current {
+  text-transform: capitalize;
+}
+
 .todo-footer__filter-menu {
   position: absolute;
   top: calc(100% + 5px);

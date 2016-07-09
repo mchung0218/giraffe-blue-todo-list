@@ -32,6 +32,7 @@ var formComponent =     require("./components/form/todo-form.component");
 
 var listComponent =     require("./components/list/todo-list.component"),
     listFact =          require("./components/list/todo-list.factory"),
+    listFilter =        require("./components/list/todo-list.filter"),
     taskComponent =     require("./components/list/task/todo-task.component"),
     taskApiFact =       require("./components/list/task/todo-task.api.factory"),
     taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
@@ -39,7 +40,8 @@ var listComponent =     require("./components/list/todo-list.component"),
 
 var footerComponent =   require("./components/footer/todo-footer.component"),
     counterComponent =  require("./components/footer/counter/todo-counter.component"),
-    filterComponent =   require("./components/footer/filter/todo-filter.component");
+    filterComponent =   require("./components/footer/filter/todo-filter.component"),
+    filterFact =        require("./components/footer/filter/todo-filter.factory");
 
 
 // App module
@@ -48,10 +50,14 @@ var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 // Configurations
 app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
+// Filters
+app.filter("priority", listFilter);
+
 // Services/factories
 app.factory("todoFact", ["taskApi", todoFact])
     .factory("listFact", listFact)
-    .factory("taskApi", ["$resource", taskApiFact]);
+    .factory("taskApi", ["$resource", taskApiFact])
+    .factory("filterFact", filterFact);
 
 // Components
 app.component("todo", mainComponent)
@@ -66,26 +72,30 @@ app.component("todo", mainComponent)
 app.directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/todo-footer.component":5,"./components/form/todo-form.component":6,"./components/list/task/todo-task.api.factory":7,"./components/list/task/todo-task.component":8,"./components/list/task/todo-task.enterEditMode.directive.js":9,"./components/list/task/todo-task.exitEditMode.directive.js":10,"./components/list/todo-list.component":11,"./components/list/todo-list.factory":12,"./components/todo.component":13,"./components/todo.factory":14}],3:[function(require,module,exports){
+},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/filter/todo-filter.factory":5,"./components/footer/todo-footer.component":6,"./components/form/todo-form.component":7,"./components/list/task/todo-task.api.factory":8,"./components/list/task/todo-task.component":9,"./components/list/task/todo-task.enterEditMode.directive.js":10,"./components/list/task/todo-task.exitEditMode.directive.js":11,"./components/list/todo-list.component":12,"./components/list/todo-list.factory":13,"./components/list/todo-list.filter":14,"./components/todo.component":15,"./components/todo.factory":16}],3:[function(require,module,exports){
 "use strict";
 
 /**
  * CounterCtrl()
  * The controller for active tasks counter.
- * @param todo: The todo factory.
+ * @param todoList: The todo-list factory.
  */
-function CounterCtrl(todo) {
+function CounterCtrl(todoList) {
     var vm = this;
 
-    // 1. Check the todo list
-    // 2. Filter out the tasks that are completed.
-    // 3. Bind a model on the DOM element
+    vm.activeTaskCount = function() {
+        var incompleteTasks = todoList.taskList.filter(function(obj) {
+            return !obj.completed;
+        });
+
+        return incompleteTasks.length || 0;
+    };
 }
 
 
 // Exports
 module.exports = {
-    controller: CounterCtrl,
+    controller: ["listFact", CounterCtrl],
     templateUrl: "/static/app/components/footer/counter/todo-counter.html"
 };
 
@@ -95,33 +105,84 @@ module.exports = {
 /**
  * FilterCtrl()
  * The controller for the filter component.
+ * @param todoFilter: The todo-filter factory.
  */
-function FilterCtrl(todo) {
+function FilterCtrl(todoFilter) {
     var vm = this;
 
-    // 1. Place an ng-class on the <li> task element which would hide the element depending on what the priority number is.
+    // Default menu is closed
+    vm.menuOpen = false;
+
+     // Current filter used
+    vm.currentFilter = todoFilter.getCurrentOption;
+
+    // Change filter
+    vm.changeFilter = function(option) {
+        todoFilter.changeOption(option);
+    };
+
+    // Toggle menu
+    vm.toggleFilterMenu = function() {
+        vm.menuOpen = !vm.menuOpen;
+    };
 }
 
 // Exports
 module.exports = {
-    controller: FilterCtrl,
+    controller: ["filterFact", FilterCtrl],
     templateUrl: "/static/app/components/footer/filter/todo-filter.html"
 };
 
 },{}],5:[function(require,module,exports){
 "use strict";
 
-function FooterCtrl() {
+/**
+ * filterFactory()
+ * The factory for filtering option.
+ */
+function filterFactory() {
+    var filter = {
+        option: "all"
+    };
 
+    // Get current option
+    filter.getCurrentOption = function(option) {
+        return filter.option;
+    };
+
+    // Change filter options
+    filter.changeOption = function(option) {
+        filter.option = option;
+    };
+
+    return filter;
+}
+
+module.exports = filterFactory;
+
+},{}],6:[function(require,module,exports){
+"use strict";
+
+/**
+ * FooterCtrl()
+ * The controller for the footer component.
+ */
+function FooterCtrl(todoList) {
+    var vm = this;
+
+    // Show only if the list has tasks, else hide.
+    vm.show = function() {
+        return todoList.taskList.length > 0;
+    };
 }
 
 
 module.exports = {
-    controller: FooterCtrl,
+    controller: ["listFact", FooterCtrl],
     templateUrl: "/static/app/components/footer/todo-footer.html"
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 /**
@@ -163,7 +224,7 @@ module.exports = {
     templateUrl: "/static/app/components/form/todo-form.html"
 };
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 /**
@@ -214,7 +275,7 @@ function taskApi($resource) {
 
 module.exports = taskApi;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 /**
@@ -289,6 +350,7 @@ function TaskCtrl(todo, todoList) {
         todo.changePriority(taskId, priority).then(function(res) {
             // If successful, update the list view.
             todoList.changePriority(taskId, priority);
+
         }, function(res) {
             alert("Task failed to change priority.");
         });
@@ -320,7 +382,7 @@ module.exports = {
     }
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /**
  * enterEditMode()
  * On click of task name box (as a <span>), enter edit mode.
@@ -345,7 +407,7 @@ function enterEditMode() {
 // Exports
 module.exports = enterEditMode;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * exitEditMode()
  * On blur/enter of task edit box, exit edit mode.
@@ -382,7 +444,7 @@ function exitEditMode() {
 // Exports
 module.exports = exitEditMode;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 /**
@@ -390,8 +452,9 @@ module.exports = exitEditMode;
  * Controller for list.
  * @param todo: The todo factory.
  * @param todoList: The todo-list factory.
+ * @param todoFilter: The todo-filter factory.
  */
-function ListCtrl(todo, todoList) {
+function ListCtrl(todo, todoList, todoFilter) {
     var vm = this;
 
     // List of tasks
@@ -408,17 +471,22 @@ function ListCtrl(todo, todoList) {
         });
     };
 
+    // Get the filter option
+    vm.listFilter = function() {
+        return todoFilter.option;
+    };
+
     // Initial execution
     vm.getTaskList();
 }
 
 // Exports
 module.exports = {
-    controller: ["todoFact", "listFact", ListCtrl],
+    controller: ["todoFact", "listFact", "filterFact", ListCtrl],
     templateUrl: "/static/app/components/list/todo-list.html"
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 /**
@@ -525,7 +593,46 @@ function todoListFactory() {
 
 module.exports = todoListFactory;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+"use strict";
+
+/**
+ * todoListFilter()
+ * Filter operations for todo-list.
+ */
+function todoListFilter() {
+    // Filter by priority
+    function filterPriority(priority) {
+        return this.filter(function(taskObj) {
+            return taskObj.priority === priority;
+        });
+    }
+
+    // Filter by active tasks
+    function filterActiveTasks() {
+        return this.filter(function(taskObj) {
+            return taskObj.priority !== "completed";
+        });
+    }
+
+    return function(taskList, option) {
+        if (option === "all") { 
+            return taskList;
+        }
+
+        else if (option === "active") {
+            return filterActiveTasks.call(taskList);
+        }
+
+        else {
+            return filterPriority.call(taskList, option);
+        }
+    };
+}
+
+module.exports = todoListFilter;
+
+},{}],15:[function(require,module,exports){
 "use strict";
 
 /**
@@ -543,7 +650,7 @@ module.exports = {
     templateUrl: "/static/app/components/todo.html"
 };
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 /**

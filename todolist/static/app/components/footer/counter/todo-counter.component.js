@@ -3,19 +3,23 @@
 /**
  * CounterCtrl()
  * The controller for active tasks counter.
- * @param todo: The todo factory.
+ * @param todoList: The todo-list factory.
  */
-function CounterCtrl(todo) {
+function CounterCtrl(todoList) {
     var vm = this;
 
-    // 1. Check the todo list
-    // 2. Filter out the tasks that are completed.
-    // 3. Bind a model on the DOM element
+    vm.activeTaskCount = function() {
+        var incompleteTasks = todoList.taskList.filter(function(obj) {
+            return !obj.completed;
+        });
+
+        return incompleteTasks.length || 0;
+    };
 }
 
 
 // Exports
 module.exports = {
-    controller: CounterCtrl,
+    controller: ["listFact", CounterCtrl],
     templateUrl: "/static/app/components/footer/counter/todo-counter.html"
 };

@@ -10,6 +10,7 @@ var formComponent =     require("./components/form/todo-form.component");
 
 var listComponent =     require("./components/list/todo-list.component"),
     listFact =          require("./components/list/todo-list.factory"),
+    listFilter =        require("./components/list/todo-list.filter"),
     taskComponent =     require("./components/list/task/todo-task.component"),
     taskApiFact =       require("./components/list/task/todo-task.api.factory"),
     taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
@@ -17,7 +18,8 @@ var listComponent =     require("./components/list/todo-list.component"),
 
 var footerComponent =   require("./components/footer/todo-footer.component"),
     counterComponent =  require("./components/footer/counter/todo-counter.component"),
-    filterComponent =   require("./components/footer/filter/todo-filter.component");
+    filterComponent =   require("./components/footer/filter/todo-filter.component"),
+    filterFact =        require("./components/footer/filter/todo-filter.factory");
 
 
 // App module
@@ -26,10 +28,14 @@ var app = angular.module("todo", ["ngAnimate", "ngResource"]);
 // Configurations
 app.config(["$httpProvider", "$resourceProvider", httpConfig]);
 
+// Filters
+app.filter("priority", listFilter);
+
 // Services/factories
 app.factory("todoFact", ["taskApi", todoFact])
     .factory("listFact", listFact)
-    .factory("taskApi", ["$resource", taskApiFact]);
+    .factory("taskApi", ["$resource", taskApiFact])
+    .factory("filterFact", filterFact);
 
 // Components
 app.component("todo", mainComponent)
