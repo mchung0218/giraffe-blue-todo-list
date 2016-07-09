@@ -90,7 +90,11 @@ def task_priority(request, id):
     if request.method == 'PATCH':
         try:
             task = get_object_or_404(Task, id=id)
-            task.priority = create_json(request.body)["priority"]
+
+            if task.completed:
+                task.completed = 0
+
+            task.priority = json.loads(request.body.decode("utf-8"))["priority"]
             task.save()
 
             return JsonResponse({'error': 'false'})
@@ -103,7 +107,7 @@ def tasks(request):
 
     # Get all tasks
     if request.method == 'GET':
-        tasks = Task.objects.all()
+        tasks = Task.objects.all().order_by("id")
         tasks_json = {"tasks": []}
         for task in tasks:
             task_json = {"text": task.text, "priority": task.priority,
@@ -143,5 +147,6 @@ def create_json(task_info):
         json_obj[info_ele[0]] = info_ele[1]
 
     return json_obj
+
 
 

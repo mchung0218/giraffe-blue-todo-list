@@ -1,0 +1,12 @@
+<div class="todo-footer__filter">
+    <span class="todo-footer__filter-label">Filter by:</span>
+    <span role="button" class="todo-footer__filter-current" ng-click="$ctrl.toggleFilterMenu()" aria-label="Change the current filter">{{ $ctrl.currentFilter() }}</span>
+    <ul class="todo-footer__filter-menu" ng-show="$ctrl.menuOpen">
+        <li class="todo-footer__filter-menu-option" role="button" aria-label="Show all tasks" ng-click="$ctrl.changeFilter('all')">All</li>
+        <li class="todo-footer__filter-menu-option" role="button" aria-label="Show active tasks" ng-click="$ctrl.changeFilter('active')">Active</li>
+        <li class="todo-footer__filter-menu-option" role="button" aria-label="Show completed tasks" ng-click="$ctrl.changeFilter('completed')">Completed</li>
+        <li class="todo-footer__filter-menu-option" role="button" aria-label="Show important priority tasks" ng-click="$ctrl.changeFilter('important')">Important</li>
+        <li class="todo-footer__filter-menu-option" role="button" aria-label="Show moderate priority tasks" ng-click="$ctrl.changeFilter('moderate')">Moderate</li>
+        <li class="todo-footer__filter-menu-option" role="button" aria-label="Show low priority tasks" ng-click="$ctrl.changeFilter('low')">Low</li>
+    </ul>
+</div>
