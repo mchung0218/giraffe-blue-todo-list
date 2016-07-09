@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^task/priority/(?P<id>\d+)$', views.task_priority,
         name='task_priority'),
     url(r'^user/create$', views.user_create, name='create_user'),
+    url(r'^user/logout$', views.user_logout, name='logout'),
 ]

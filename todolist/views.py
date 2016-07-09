@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.template.context_processors import csrf
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from todolist.models import Task
 from .forms import *
 import json
-from django.contrib.auth.models import User
+
 
 # FOR TESTING ONLY
 def testUpdate(request):
@@ -116,7 +118,7 @@ def tasks(request):
 
         return JsonResponse(tasks_json)
 
-#/user/create
+# /user/create
 def user_create(request):
     if request.method == 'POST':
         try:
@@ -132,3 +134,14 @@ def user_create(request):
             return(request.POST)
         else:
             return JsonResponse({'error': 'true', 'errorMessage': 'Expected POST request. Recieved method: ' + request.method })
+
+
+# /user/logout
+@login_required
+def user_logout(request):
+    try:
+        auth.logout(request)
+        return JsonResponse{'error': 'false'}
+    except Exception as e:
+        return JsonResponse{'error': 'true',
+                            'errorMessage': 'Could not logout: ' + e}
