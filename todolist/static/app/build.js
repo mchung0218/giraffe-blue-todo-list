@@ -27,7 +27,9 @@ var httpConfig =        require("./app.config"),
     routesConfig =      require("./app.routes");
 
 // Login components
-var loginComponent =    require("./login/login.component");
+var loginComponent =    require("./login/login.component"),
+    loginFact =         require("./login/login.factory"),
+    loginApiFact =      require("./login/login.api.factory");
 
 // Todo components
 var todoComponent =     require("./todo/todo.component"),
@@ -60,7 +62,9 @@ app.config(["$httpProvider", "$resourceProvider", httpConfig])
 app.filter("priority", listFilter);
 
 // Services/factories
-app.factory("todoFact", ["taskApi", todoFact])
+app.factory("loginFact", ["loginApi", loginFact])
+    .factory("loginApi", ["$resource", loginApiFact])
+    .factory("todoFact", ["taskApi", todoFact])
     .factory("listFact", listFact)
     .factory("taskApi", ["$resource", taskApiFact])
     .factory("filterFact", filterFact);
@@ -79,7 +83,7 @@ app.component("login", loginComponent)
 app.directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
 
-},{"./app.config":1,"./app.routes":3,"./login/login.component":4,"./todo/footer/counter/todo-counter.component":5,"./todo/footer/filter/todo-filter.component":6,"./todo/footer/filter/todo-filter.factory":7,"./todo/footer/todo-footer.component":8,"./todo/form/todo-form.component":9,"./todo/list/task/todo-task.api.factory":10,"./todo/list/task/todo-task.component":11,"./todo/list/task/todo-task.enterEditMode.directive.js":12,"./todo/list/task/todo-task.exitEditMode.directive.js":13,"./todo/list/todo-list.component":14,"./todo/list/todo-list.factory":15,"./todo/list/todo-list.filter":16,"./todo/todo.component":17,"./todo/todo.factory":18}],3:[function(require,module,exports){
+},{"./app.config":1,"./app.routes":3,"./login/login.api.factory":4,"./login/login.component":5,"./login/login.factory":6,"./todo/footer/counter/todo-counter.component":7,"./todo/footer/filter/todo-filter.component":8,"./todo/footer/filter/todo-filter.factory":9,"./todo/footer/todo-footer.component":10,"./todo/form/todo-form.component":11,"./todo/list/task/todo-task.api.factory":12,"./todo/list/task/todo-task.component":13,"./todo/list/task/todo-task.enterEditMode.directive.js":14,"./todo/list/task/todo-task.exitEditMode.directive.js":15,"./todo/list/todo-list.component":16,"./todo/list/todo-list.factory":17,"./todo/list/todo-list.filter":18,"./todo/todo.component":19,"./todo/todo.factory":20}],3:[function(require,module,exports){
 "use strict";
 
 /**
@@ -103,13 +107,120 @@ function routesConfig($stateProvider, $urlRouterProvider) {
 module.exports = routesConfig;
 
 },{}],4:[function(require,module,exports){
+"use strict";
+
+/**
+ * loginApi()
+ * Login API resources.
+ */
+function loginApi($resource) {
+    return {
+        "User": $resource("/user/"),
+
+        "UserCreate": $resource("/user/create", {}, {
+            save: {
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "transformRequest": function(obj) {     // Convert the JSON to seralized POST data
+                    var str = [];
+                    for (var p in obj) {
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    }
+                    return str.join("&");
+                }
+            }
+        }),
+
+        "UserLogout": $resource("/user/logout", {}, {
+            logout: {
+                "method": "POST"
+            }
+        })
+    };
+}
+
+
+module.exports = loginApi;
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+/**
+ * LoginCtrl()
+ * Login controller.
+ * @param login: The login factory.
+ */
+function LoginCtrl(login) {
+    var vm = this;
+
+    /**
+     * registerUser()
+     * Registers a user.
+     */
+    vm.registerUser = function() {
+        var formData = {
+            username: vm.form.username,
+            email: vm.form.email,
+            password: vm.form.password,
+        };
+
+        console.log(formData);
+
+        login.registerUser(formData).then(function(res) {
+            console.log("Created user");
+            console.log(res);
+        }, function(res) {
+            console.log("Failed to create user");
+            document.write(res.data);
+        });
+    };
+
+    /**
+     * loginUser()
+     * Logins a user.
+     */
+    vm.signinUser = function() {
+
+    };
+}
 
 
 module.exports = {
+    controller: ["loginFact", LoginCtrl],
     templateUrl: "/static/app/login/login.html"
 };
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
+"use strict";
+
+/**
+ * loginFactory()
+ * A factory for login usage.
+ * @param loginApi: The login API.
+ * @return login: The login object.
+ */
+function loginFactory(loginApi) {
+    var login = {};
+
+    /**
+     * registerUser()
+     * Registers a user.
+     * @param userParams: Params to create the user ({ username, email, password })
+     * @return : A promise of the resource.
+     */
+    login.registerUser = function(userParams) {
+        return loginApi.UserCreate.save(userParams).$promise;
+    };
+
+    return login;
+}
+
+
+module.exports = loginFactory;
+
+},{}],7:[function(require,module,exports){
 "use strict";
 
 /**
@@ -136,7 +247,7 @@ module.exports = {
     templateUrl: "/static/app/todo/footer/counter/todo-counter.html"
 };
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 /**
@@ -170,7 +281,7 @@ module.exports = {
     templateUrl: "/static/app/todo/footer/filter/todo-filter.html"
 };
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 "use strict";
 
 /**
@@ -197,7 +308,7 @@ function filterFactory() {
 
 module.exports = filterFactory;
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 /**
@@ -219,7 +330,7 @@ module.exports = {
     templateUrl: "/static/app/todo/footer/todo-footer.html"
 };
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 /**
@@ -261,7 +372,7 @@ module.exports = {
     templateUrl: "/static/app/todo/form/todo-form.html"
 };
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 /**
@@ -312,7 +423,7 @@ function taskApi($resource) {
 
 module.exports = taskApi;
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 /**
@@ -419,7 +530,7 @@ module.exports = {
     }
 };
 
-},{}],12:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * enterEditMode()
  * On click of task name box (as a <span>), enter edit mode.
@@ -444,7 +555,7 @@ function enterEditMode() {
 // Exports
 module.exports = enterEditMode;
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * exitEditMode()
  * On blur/enter of task edit box, exit edit mode.
@@ -481,7 +592,7 @@ function exitEditMode() {
 // Exports
 module.exports = exitEditMode;
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 /**
@@ -523,7 +634,7 @@ module.exports = {
     templateUrl: "/static/app/todo/list/todo-list.html"
 };
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 "use strict";
 
 /**
@@ -630,7 +741,7 @@ function todoListFactory() {
 
 module.exports = todoListFactory;
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 /**
@@ -669,7 +780,7 @@ function todoListFilter() {
 
 module.exports = todoListFilter;
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 /**
@@ -687,7 +798,7 @@ module.exports = {
     templateUrl: "/static/app/todo/todo.html"
 };
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 /**

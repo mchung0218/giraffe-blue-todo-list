@@ -5,7 +5,9 @@ var httpConfig =        require("./app.config"),
     routesConfig =      require("./app.routes");
 
 // Login components
-var loginComponent =    require("./login/login.component");
+var loginComponent =    require("./login/login.component"),
+    loginFact =         require("./login/login.factory"),
+    loginApiFact =      require("./login/login.api.factory");
 
 // Todo components
 var todoComponent =     require("./todo/todo.component"),
@@ -38,7 +40,9 @@ app.config(["$httpProvider", "$resourceProvider", httpConfig])
 app.filter("priority", listFilter);
 
 // Services/factories
-app.factory("todoFact", ["taskApi", todoFact])
+app.factory("loginFact", ["loginApi", loginFact])
+    .factory("loginApi", ["$resource", loginApiFact])
+    .factory("todoFact", ["taskApi", todoFact])
     .factory("listFact", listFact)
     .factory("taskApi", ["$resource", taskApiFact])
     .factory("filterFact", filterFact);
