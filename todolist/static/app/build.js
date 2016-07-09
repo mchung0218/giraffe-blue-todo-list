@@ -25,23 +25,23 @@ module.exports = httpConfig;
 // Requires
 var httpConfig =        require("./app.config");
 
-var mainComponent =     require("./components/todo.component"),
-    todoFact =          require("./components/todo.factory");
+var mainComponent =     require("./todo/todo.component"),
+    todoFact =          require("./todo/todo.factory");
 
-var formComponent =     require("./components/form/todo-form.component");
+var formComponent =     require("./todo/form/todo-form.component");
 
-var listComponent =     require("./components/list/todo-list.component"),
-    listFact =          require("./components/list/todo-list.factory"),
-    listFilter =        require("./components/list/todo-list.filter"),
-    taskComponent =     require("./components/list/task/todo-task.component"),
-    taskApiFact =       require("./components/list/task/todo-task.api.factory"),
-    taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
-    taskExitEditMode =  require("./components/list/task/todo-task.exitEditMode.directive.js");
+var listComponent =     require("./todo/list/todo-list.component"),
+    listFact =          require("./todo/list/todo-list.factory"),
+    listFilter =        require("./todo/list/todo-list.filter"),
+    taskComponent =     require("./todo/list/task/todo-task.component"),
+    taskApiFact =       require("./todo/list/task/todo-task.api.factory"),
+    taskEnterEditMode = require("./todo/list/task/todo-task.enterEditMode.directive.js"),
+    taskExitEditMode =  require("./todo/list/task/todo-task.exitEditMode.directive.js");
 
-var footerComponent =   require("./components/footer/todo-footer.component"),
-    counterComponent =  require("./components/footer/counter/todo-counter.component"),
-    filterComponent =   require("./components/footer/filter/todo-filter.component"),
-    filterFact =        require("./components/footer/filter/todo-filter.factory");
+var footerComponent =   require("./todo/footer/todo-footer.component"),
+    counterComponent =  require("./todo/footer/counter/todo-counter.component"),
+    filterComponent =   require("./todo/footer/filter/todo-filter.component"),
+    filterFact =        require("./todo/footer/filter/todo-filter.factory");
 
 
 // App module
@@ -72,7 +72,7 @@ app.component("todo", mainComponent)
 app.directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
 
-},{"./app.config":1,"./components/footer/counter/todo-counter.component":3,"./components/footer/filter/todo-filter.component":4,"./components/footer/filter/todo-filter.factory":5,"./components/footer/todo-footer.component":6,"./components/form/todo-form.component":7,"./components/list/task/todo-task.api.factory":8,"./components/list/task/todo-task.component":9,"./components/list/task/todo-task.enterEditMode.directive.js":10,"./components/list/task/todo-task.exitEditMode.directive.js":11,"./components/list/todo-list.component":12,"./components/list/todo-list.factory":13,"./components/list/todo-list.filter":14,"./components/todo.component":15,"./components/todo.factory":16}],3:[function(require,module,exports){
+},{"./app.config":1,"./todo/footer/counter/todo-counter.component":3,"./todo/footer/filter/todo-filter.component":4,"./todo/footer/filter/todo-filter.factory":5,"./todo/footer/todo-footer.component":6,"./todo/form/todo-form.component":7,"./todo/list/task/todo-task.api.factory":8,"./todo/list/task/todo-task.component":9,"./todo/list/task/todo-task.enterEditMode.directive.js":10,"./todo/list/task/todo-task.exitEditMode.directive.js":11,"./todo/list/todo-list.component":12,"./todo/list/todo-list.factory":13,"./todo/list/todo-list.filter":14,"./todo/todo.component":15,"./todo/todo.factory":16}],3:[function(require,module,exports){
 "use strict";
 
 /**
@@ -96,7 +96,7 @@ function CounterCtrl(todoList) {
 // Exports
 module.exports = {
     controller: ["listFact", CounterCtrl],
-    templateUrl: "/static/app/components/footer/counter/todo-counter.html"
+    templateUrl: "/static/app/todo/footer/counter/todo-counter.html"
 };
 
 },{}],4:[function(require,module,exports){
@@ -130,7 +130,7 @@ function FilterCtrl(todoFilter) {
 // Exports
 module.exports = {
     controller: ["filterFact", FilterCtrl],
-    templateUrl: "/static/app/components/footer/filter/todo-filter.html"
+    templateUrl: "/static/app/todo/footer/filter/todo-filter.html"
 };
 
 },{}],5:[function(require,module,exports){
@@ -179,7 +179,7 @@ function FooterCtrl(todoList) {
 
 module.exports = {
     controller: ["listFact", FooterCtrl],
-    templateUrl: "/static/app/components/footer/todo-footer.html"
+    templateUrl: "/static/app/todo/footer/todo-footer.html"
 };
 
 },{}],7:[function(require,module,exports){
@@ -221,7 +221,7 @@ function FormCtrl(todo, todoList) {
 // Exports
 module.exports = {
     controller: ["todoFact", "listFact", FormCtrl],
-    templateUrl: "/static/app/components/form/todo-form.html"
+    templateUrl: "/static/app/todo/form/todo-form.html"
 };
 
 },{}],8:[function(require,module,exports){
@@ -375,7 +375,7 @@ function TaskCtrl(todo, todoList) {
 // Exports
 module.exports = {
     controller: ["todoFact", "listFact", TaskCtrl],
-    templateUrl: "/static/app/components/list/task/todo-task.html",
+    templateUrl: "/static/app/todo/list/task/todo-task.html",
     bindings: {     
         // These are HTML attributes passed as parameters to the controller
         "task": "="     // The Task object itself
@@ -483,7 +483,7 @@ function ListCtrl(todo, todoList, todoFilter) {
 // Exports
 module.exports = {
     controller: ["todoFact", "listFact", "filterFact", ListCtrl],
-    templateUrl: "/static/app/components/list/todo-list.html"
+    templateUrl: "/static/app/todo/list/todo-list.html"
 };
 
 },{}],13:[function(require,module,exports){
@@ -647,7 +647,7 @@ function TodoCtrl(todo) {
 // Export the component (invoked in app.js)
 module.exports = {
     controller: ["todoFact", TodoCtrl],
-    templateUrl: "/static/app/components/todo.html"
+    templateUrl: "/static/app/todo/todo.html"
 };
 
 },{}],16:[function(require,module,exports){

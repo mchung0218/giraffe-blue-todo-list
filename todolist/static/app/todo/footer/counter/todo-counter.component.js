@@ -21,5 +21,5 @@ function CounterCtrl(todoList) {
 // Exports
 module.exports = {
     controller: ["listFact", CounterCtrl],
-    templateUrl: "/static/app/components/footer/counter/todo-counter.html"
+    templateUrl: "/static/app/todo/footer/counter/todo-counter.html"
 };

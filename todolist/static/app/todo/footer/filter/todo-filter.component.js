@@ -28,5 +28,5 @@ function FilterCtrl(todoFilter) {
 // Exports
 module.exports = {
     controller: ["filterFact", FilterCtrl],
-    templateUrl: "/static/app/components/footer/filter/todo-filter.html"
+    templateUrl: "/static/app/todo/footer/filter/todo-filter.html"
 };

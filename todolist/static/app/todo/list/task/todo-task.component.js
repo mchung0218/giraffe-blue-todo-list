@@ -97,7 +97,7 @@ function TaskCtrl(todo, todoList) {
 // Exports
 module.exports = {
     controller: ["todoFact", "listFact", TaskCtrl],
-    templateUrl: "/static/app/components/list/task/todo-task.html",
+    templateUrl: "/static/app/todo/list/task/todo-task.html",
     bindings: {     
         // These are HTML attributes passed as parameters to the controller
         "task": "="     // The Task object itself

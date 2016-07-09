@@ -36,5 +36,5 @@ function ListCtrl(todo, todoList, todoFilter) {
 // Exports
 module.exports = {
     controller: ["todoFact", "listFact", "filterFact", ListCtrl],
-    templateUrl: "/static/app/components/list/todo-list.html"
+    templateUrl: "/static/app/todo/list/todo-list.html"
 };

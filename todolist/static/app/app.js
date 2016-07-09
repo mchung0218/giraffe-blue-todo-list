@@ -3,23 +3,23 @@
 // Requires
 var httpConfig =        require("./app.config");
 
-var mainComponent =     require("./components/todo.component"),
-    todoFact =          require("./components/todo.factory");
+var mainComponent =     require("./todo/todo.component"),
+    todoFact =          require("./todo/todo.factory");
 
-var formComponent =     require("./components/form/todo-form.component");
+var formComponent =     require("./todo/form/todo-form.component");
 
-var listComponent =     require("./components/list/todo-list.component"),
-    listFact =          require("./components/list/todo-list.factory"),
-    listFilter =        require("./components/list/todo-list.filter"),
-    taskComponent =     require("./components/list/task/todo-task.component"),
-    taskApiFact =       require("./components/list/task/todo-task.api.factory"),
-    taskEnterEditMode = require("./components/list/task/todo-task.enterEditMode.directive.js"),
-    taskExitEditMode =  require("./components/list/task/todo-task.exitEditMode.directive.js");
+var listComponent =     require("./todo/list/todo-list.component"),
+    listFact =          require("./todo/list/todo-list.factory"),
+    listFilter =        require("./todo/list/todo-list.filter"),
+    taskComponent =     require("./todo/list/task/todo-task.component"),
+    taskApiFact =       require("./todo/list/task/todo-task.api.factory"),
+    taskEnterEditMode = require("./todo/list/task/todo-task.enterEditMode.directive.js"),
+    taskExitEditMode =  require("./todo/list/task/todo-task.exitEditMode.directive.js");
 
-var footerComponent =   require("./components/footer/todo-footer.component"),
-    counterComponent =  require("./components/footer/counter/todo-counter.component"),
-    filterComponent =   require("./components/footer/filter/todo-filter.component"),
-    filterFact =        require("./components/footer/filter/todo-filter.factory");
+var footerComponent =   require("./todo/footer/todo-footer.component"),
+    counterComponent =  require("./todo/footer/counter/todo-counter.component"),
+    filterComponent =   require("./todo/footer/filter/todo-filter.component"),
+    filterFact =        require("./todo/footer/filter/todo-filter.factory");
 
 
 // App module

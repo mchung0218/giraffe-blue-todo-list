@@ -12,5 +12,5 @@ function TodoCtrl(todo) {
 // Export the component (invoked in app.js)
 module.exports = {
     controller: ["todoFact", TodoCtrl],
-    templateUrl: "/static/app/components/todo.html"
+    templateUrl: "/static/app/todo/todo.html"
 };

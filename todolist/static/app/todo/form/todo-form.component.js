@@ -36,5 +36,5 @@ function FormCtrl(todo, todoList) {
 // Exports
 module.exports = {
     controller: ["todoFact", "listFact", FormCtrl],
-    templateUrl: "/static/app/components/form/todo-form.html"
+    templateUrl: "/static/app/todo/form/todo-form.html"
 };

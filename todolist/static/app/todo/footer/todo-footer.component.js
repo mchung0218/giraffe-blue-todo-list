@@ -16,5 +16,5 @@ function FooterCtrl(todoList) {
 
 module.exports = {
     controller: ["listFact", FooterCtrl],
-    templateUrl: "/static/app/components/footer/todo-footer.html"
+    templateUrl: "/static/app/todo/footer/todo-footer.html"
 };
