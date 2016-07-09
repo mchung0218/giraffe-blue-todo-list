@@ -132,18 +132,3 @@ def user_create(request):
             return(request.POST)
         else:
             return JsonResponse({'error': 'true', 'errorMessage': 'Expected POST request. Recieved method: ' + request.method })
-
-
-
-### Functions ###
-
-# Create a json/dict object from byte string
-def create_json(task_info):
-    task_info = task_info.decode("utf-8").split("&")
-
-    json_obj = {}
-    for info in task_info:
-        info_ele = info.split("=")
-        json_obj[info_ele[0]] = info_ele[1]
-
-    return json_obj
