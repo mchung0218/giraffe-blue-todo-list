@@ -150,16 +150,19 @@ function LoginCtrl(user, $state) {
         // Only register if both fields are filled
         if (vm.form.password && vm.form.email) {
             var formData = {
-                username: "Hello",
                 email: vm.form.email,
                 password: vm.form.password,
             };
 
-            user.register(formData).then(function(res) {
+            user
+                .register(formData)
+                .then(function(res) {
+                    // If register is successful, attempt to log in user.
+                    vm.loginUser(formData);
 
-            }, function(res) {
-                vm.error = "badRegisterEmail";
-            });
+                }, function(res) {
+                    vm.error = "badRegisterEmail";
+                });
         }
 
         // Otherwise, show error
@@ -179,6 +182,7 @@ function LoginCtrl(user, $state) {
         };
 
         user.login(formData).then(function(res) {
+            console.log(res);
             // If the user is authenticated, then move to list
             if (res.login === 'true') {
                 $state.go("todo");
@@ -189,6 +193,7 @@ function LoginCtrl(user, $state) {
                 vm.error = "badLogin";
             }
         }, function(res) {
+            console.log(res);
             vm.error = "badLogin";
         });
     };

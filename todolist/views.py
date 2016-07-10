@@ -131,8 +131,9 @@ def user_create(request):
             body_unicode = request.body.decode('utf-8')
             body = json.loads(body_unicode)
             username = body["email"]
+            email = body["email"]
             password = body["password"]
-            user = User.objects.create_user(username, password)
+            user = User.objects.create_user(username, email, password)
 
             return JsonResponse({'error': 'false'})
         except Exception as e:
