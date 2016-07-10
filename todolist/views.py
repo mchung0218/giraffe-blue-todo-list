@@ -154,12 +154,10 @@ def user_auth(request):
 
     if user is not None:
         auth.login(request, user)
-
         return HttpResponseRedirect('/')
-
     else:
         return JsonResponse({'error': 'true',
-                            'errorMessage': 'Email or Password are incorrect'})
+                            'errorMessage': 'Email or Password is incorrect'})
 
 # /user/logout
 @login_required
