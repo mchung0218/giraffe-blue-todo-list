@@ -17,12 +17,12 @@ function routesConfig($stateProvider, $urlRouterProvider) {
                     
                     // Check if the user is logged in
                     user.checkLoggedIn().then(function(res) {
-                        console.log(res);
                         // If they are, redirect to list
                         if (res.login === 'true') {
                             deferred.resolve();
                             $state.go("todo");
                         }
+                        
                         // Otherwise, stay
                         else {
                             deferred.resolve();

@@ -103,7 +103,6 @@ function routesConfig($stateProvider, $urlRouterProvider) {
                     
                     // Check if the user is logged in
                     user.checkLoggedIn().then(function(res) {
-                        console.log(res);
                         // If they are, redirect to list
                         if (res.login === 'true') {
                             deferred.resolve();
@@ -147,17 +146,25 @@ function LoginCtrl(user, $state) {
      * Registers a user.
      */
     vm.registerUser = function() {
-        var formData = {
-            username: "Hello",
-            email: vm.form.email,
-            password: vm.form.password,
-        };
+        // Only register if both fields are filled
+        if (vm.form.password && vm.form.email) {
+            var formData = {
+                username: "Hello",
+                email: vm.form.email,
+                password: vm.form.password,
+            };
 
-        user.register(formData).then(function(res) {
+            user.register(formData).then(function(res) {
 
-        }, function(res) {
-            vm.error = "badRegister";
-        });
+            }, function(res) {
+                vm.error = "badRegisterEmail";
+            });
+        }
+
+        // Otherwise, show error
+        else {
+            vm.error = "badRegisterMissing";
+        }
     };
 
     /**
