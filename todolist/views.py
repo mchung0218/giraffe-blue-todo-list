@@ -130,9 +130,10 @@ def user_create(request):
         try:
             body_unicode = request.body.decode('utf-8')
             body = json.loads(body_unicode)
-            email = body["email"]
+            username = body["email"]
             password = body["password"]
-            user = User.objects.create_user(email, password)
+            user = User.objects.create_user(username, password)
+
             return JsonResponse({'error': 'false'})
         except Exception as e:
             #return JsonResponse({'error': 'true', 'errorMessage': e})
@@ -143,16 +144,8 @@ def user_create(request):
 
 # /user/auth
 def user_auth(request):
-    email = request.POST["email"]
+    username = request.POST["email"]
     password = request.POST["password"]
-
-    try:
-        user = User.objects.get(email=email)
-    except:
-        return JsonResponse({'error': 'true',
-                            'errorMessage': 'User does not exist'})
-
-    username = user.username
     user = auth.authenticate(username=username, password=password)
 
     if user is not None:
@@ -160,7 +153,8 @@ def user_auth(request):
         return JsonResponse({'login': 'true' })
     else:
         return JsonResponse({'error': 'true',
-                            'errorMessage': 'Email or Password is incorrect'})
+                            'errorMessage': 'Email or Password is incorrect',
+                            'login': 'false'})
 
 # /user/logout
 @login_required
