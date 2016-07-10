@@ -157,11 +157,7 @@ def user_auth(request):
 
     if user is not None:
         auth.login(request, user)
-
-        if request.user.is_authenticated():
-            return JsonResponse({'login': 'true' })
-        else:
-            return JsonResponse({'login': 'false' })
+        return JsonResponse({'login': 'true' })
     else:
         return JsonResponse({'error': 'true',
                             'errorMessage': 'Email or Password is incorrect'})
