@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.template.context_processors import csrf
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from todolist.models import Task
+from django.contrib import auth
+from todolist.models import Task, User
 from .forms import *
 import json
 
@@ -136,6 +137,22 @@ def user_create(request):
         else:
             return JsonResponse({'error': 'true', 'errorMessage': 'Expected POST request. Recieved method: ' + request.method })
 
+
+# /user/auth
+def user_auth(request):
+    email = request.POST["email"]
+    password = request.POST["password"]
+    username = User.objects.get(email=email).username
+    user = auth.authenticate(username=username, password=password)
+
+    if user is not None:
+        auth.login(request, user)
+
+        return HttpResponseRedirect('/')
+
+    else:
+        return JsonResponse({'error': 'true',
+                            'errorMessage': 'Email or Password are incorrect'})
 
 # /user/logout
 @login_required
