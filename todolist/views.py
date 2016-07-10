@@ -20,6 +20,7 @@ def testDelete(request):
 
 
 # /
+@login_required
 def list(request):
     c = {}
     c.update(csrf(request))
@@ -28,6 +29,7 @@ def list(request):
 
 
 # /task/{id}
+@login_required
 def task(request, id):
 
     # Add task
@@ -72,6 +74,7 @@ def task(request, id):
 
 
 # /task/completed/{id}
+@login_required
 def task_completed(request, id):
 
     # Mark as completed
@@ -87,6 +90,7 @@ def task_completed(request, id):
 
 
 # /task/priority/{id}
+@login_required
 def task_priority(request, id):
 
     # Set priority
@@ -106,6 +110,7 @@ def task_priority(request, id):
 
 
 # /tasks
+@login_required
 def tasks(request):
 
     # Get all tasks
