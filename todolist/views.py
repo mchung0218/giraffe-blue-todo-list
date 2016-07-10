@@ -142,7 +142,14 @@ def user_create(request):
 def user_auth(request):
     email = request.POST["email"]
     password = request.POST["password"]
-    username = User.objects.get(email=email).username
+
+    try:
+        user = User.objects.get(email=email)
+    except:
+        return JsonResponse({'error': 'true',
+                            'errorMessage': 'User does not exist'})
+
+    username = user.username
     user = auth.authenticate(username=username, password=password)
 
     if user is not None:
