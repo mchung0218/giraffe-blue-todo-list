@@ -4,7 +4,7 @@ from django.template.context_processors import csrf
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
-from todolist.models import Task, User
+from todolist.models import Task
 from .forms import *
 import json
 
