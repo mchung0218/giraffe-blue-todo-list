@@ -52,12 +52,16 @@ def task(request, id):
     elif request.method == 'PATCH':
         try:
             task = get_object_or_404(Task, id=id)
-            body_unicode = request.body.decode('utf-8')
-            body = json.loads(body_unicode)
-            task.text = body["text"]
-            task.save()
-
-            return JsonResponse({'error': 'false'})
+			username = request.user.username
+			if task.owner == username:
+            	body_unicode = request.body.decode('utf-8')
+            	body = json.loads(body_unicode)
+            	task.text = body["text"]
+            	task.save()
+				return JsonResponse({'error': 'false'})
+			else:
+				return JsonResponse({'error': 'true', 'errorMessage': 'Permission Denied'})
+            
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
 
@@ -65,9 +69,13 @@ def task(request, id):
     elif request.method == 'DELETE':
         try:
             task = get_object_or_404(Task, id=id)
-            task.delete()
-
-            return JsonResponse({'error': 'false'})
+			username = request.user.username
+			if task.owner == username:
+            	task.delete()
+				return JsonResponse({'error': 'false'})
+			else:
+				return JsonResponse({'error': 'true', 'errorMessage': 'Permission Denied'})
+            
         except Exception as e:
             return JsonResponse({'error': 'true', 'errorMessage': e})
 
