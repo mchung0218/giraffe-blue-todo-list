@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.template.context_processors import csrf
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from todolist.models import Task
+from django.contrib import auth
+from todolist.models import Task, User
 from .forms import *
 import json
 
@@ -19,6 +20,7 @@ def testDelete(request):
 
 
 # /
+@login_required
 def list(request):
     c = {}
     c.update(csrf(request))
@@ -27,6 +29,7 @@ def list(request):
 
 
 # /task/{id}
+@login_required
 def task(request, id):
 
     # Add task
@@ -71,6 +74,7 @@ def task(request, id):
 
 
 # /task/completed/{id}
+@login_required
 def task_completed(request, id):
 
     # Mark as completed
@@ -86,6 +90,7 @@ def task_completed(request, id):
 
 
 # /task/priority/{id}
+@login_required
 def task_priority(request, id):
 
     # Set priority
@@ -105,6 +110,7 @@ def task_priority(request, id):
 
 
 # /tasks
+@login_required
 def tasks(request):
 
     # Get all tasks
@@ -136,6 +142,27 @@ def user_create(request):
         else:
             return JsonResponse({'error': 'true', 'errorMessage': 'Expected POST request. Recieved method: ' + request.method })
 
+
+# /user/auth
+def user_auth(request):
+    email = request.POST["email"]
+    password = request.POST["password"]
+
+    try:
+        user = User.objects.get(email=email)
+    except:
+        return JsonResponse({'error': 'true',
+                            'errorMessage': 'User does not exist'})
+
+    username = user.username
+    user = auth.authenticate(username=username, password=password)
+
+    if user is not None:
+        auth.login(request, user)
+        return HttpResponseRedirect('/')
+    else:
+        return JsonResponse({'error': 'true',
+                            'errorMessage': 'Email or Password is incorrect'})
 
 # /user/logout
 @login_required
