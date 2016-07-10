@@ -108,6 +108,7 @@ function routesConfig($stateProvider, $urlRouterProvider) {
                             deferred.resolve();
                             $state.go("todo");
                         }
+                        
                         // Otherwise, stay
                         else {
                             deferred.resolve();
@@ -295,17 +296,20 @@ function userFactory(userApi) {
     /**
      * logout()
      * Logs out a user.
-     * @param userParams: Params to log out
      * @return : A promise of the resource.
      */
     user.logout = function(userParams) {
         return userApi.UserLogout.logout(userParams).$promise;
     };
 
+    /**
+     * checkLoggedIn()
+     * Checks if a user is logged in or not.
+     * @return : A promise of the resource.
+     */
     user.checkLoggedIn = function() {
         return userApi.UserLoggedIn.check().$promise;
     };
-
 
     return user;
 }
