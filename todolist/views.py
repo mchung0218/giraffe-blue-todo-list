@@ -20,7 +20,6 @@ def testDelete(request):
 
 
 # /
-@login_required
 def list(request):
     c = {}
     c.update(csrf(request))
@@ -131,7 +130,7 @@ def user_create(request):
         try:
             body_unicode = request.body.decode('utf-8')
             body = json.loads(body_unicode)
-            username = body["username"]
+            # username = body["username"]
             email = body["email"]
             password = body["password"]
             user = User.objects.create_user(username, email, password)
@@ -159,7 +158,11 @@ def user_auth(request):
 
     if user is not None:
         auth.login(request, user)
-        return HttpResponseRedirect('/')
+
+        if request.user.is_authenticated():
+            return JsonResponse({'login': 'true' })
+        else:
+            return JsonResponse({'login': 'false' })
     else:
         return JsonResponse({'error': 'true',
                             'errorMessage': 'Email or Password is incorrect'})
@@ -173,3 +176,11 @@ def user_logout(request):
     except Exception as e:
         return JsonResponse({'error': 'true',
                             'errorMessage': 'Could not logout: ' + e})
+
+
+# /user/loggedin
+def user_loggedin(request):
+    if request.user.is_authenticated():
+        return JsonResponse({'login': 'true' })
+    else:
+        return JsonResponse({'login': 'false' })

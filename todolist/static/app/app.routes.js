@@ -10,10 +10,32 @@ function routesConfig($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state("login", {
             url: "/",
-            template: "<login></login>"
+            template: "<login></login>",
+            resolve: {
+                checkLoggedIn: ["$q", "$state", "userFact", function($q, $state, user) {
+                    var deferred = $q.defer();
+                    
+                    // Check if the user is logged in
+                    user.checkLoggedIn().then(function(res) {
+                        console.log(res);
+                        // If they are, redirect to list
+                        if (res.login === 'true') {
+                            deferred.resolve();
+                            $state.go("todo");
+                        }
+                        // Otherwise, stay
+                        else {
+                            deferred.resolve();
+                        }
+                    }, function(res) {
+                        deferred.resolve();
+                    });
+
+                    return deferred.promise;
+                }]
+            }
         })
         .state("todo", {
-            url: "/todo",
             template: "<todo></todo>"
         });
 }

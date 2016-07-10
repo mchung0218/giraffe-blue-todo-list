@@ -3,10 +3,13 @@
 /**
  * LoginCtrl()
  * Login controller.
- * @param login: The login factory.
+ * @param user: The user factory.
  */
-function LoginCtrl(login) {
+function LoginCtrl(user, $state) {
     var vm = this;
+
+    // No error by default
+    vm.error = "";
 
     /**
      * registerUser()
@@ -14,33 +17,58 @@ function LoginCtrl(login) {
      */
     vm.registerUser = function() {
         var formData = {
-            username: vm.form.username,
+            username: "Hello",
             email: vm.form.email,
             password: vm.form.password,
         };
 
-        console.log(formData);
+        user.register(formData).then(function(res) {
 
-        login.registerUser(formData).then(function(res) {
-            console.log("Created user");
-            console.log(res);
         }, function(res) {
-            console.log("Failed to create user");
-            document.write(res.data);
+            vm.error = "badRegister";
         });
     };
 
     /**
      * loginUser()
-     * Logins a user.
+     * Logins the user.
      */
-    vm.signinUser = function() {
+    vm.loginUser = function() {
+        var formData = {
+            email: vm.form.email,
+            password: vm.form.password,
+        };
 
+        user.login(formData).then(function(res) {
+            // If the user is authenticated, then move to list
+            if (res.login === 'true') {
+                $state.go("todo");
+            }
+
+            // Otherwise, show an error
+            else {
+                vm.error = "badLogin";
+            }
+        }, function(res) {
+            vm.error = "badLogin";
+        });
+    };
+
+    /**
+     * logoutUser()
+     * Logs out the user.
+     */
+    vm.logoutUser = function() {
+        user.logout().then(function(res) {
+            $state.go("login");
+        }, function(res) {
+            alert("Failed to log out");
+        });
     };
 }
 
 
 module.exports = {
-    controller: ["loginFact", LoginCtrl],
+    controller: ["userFact", "$state", LoginCtrl],
     templateUrl: "/static/app/login/login.html"
 };

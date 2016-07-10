@@ -28,8 +28,8 @@ var httpConfig =        require("./app.config"),
 
 // Login components
 var loginComponent =    require("./login/login.component"),
-    loginFact =         require("./login/login.factory"),
-    loginApiFact =      require("./login/login.api.factory");
+    userFact =         require("./login/user/user.factory"),
+    userApiFact =      require("./login/user/user.api.factory");
 
 // Todo components
 var todoComponent =     require("./todo/todo.component"),
@@ -62,8 +62,8 @@ app.config(["$httpProvider", "$resourceProvider", httpConfig])
 app.filter("priority", listFilter);
 
 // Services/factories
-app.factory("loginFact", ["loginApi", loginFact])
-    .factory("loginApi", ["$resource", loginApiFact])
+app.factory("userFact", ["userApi", userFact])
+    .factory("userApi", ["$resource", userApiFact])
     .factory("todoFact", ["taskApi", todoFact])
     .factory("listFact", listFact)
     .factory("taskApi", ["$resource", taskApiFact])
@@ -83,7 +83,7 @@ app.component("login", loginComponent)
 app.directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
 
-},{"./app.config":1,"./app.routes":3,"./login/login.api.factory":4,"./login/login.component":5,"./login/login.factory":6,"./todo/footer/counter/todo-counter.component":7,"./todo/footer/filter/todo-filter.component":8,"./todo/footer/filter/todo-filter.factory":9,"./todo/footer/todo-footer.component":10,"./todo/form/todo-form.component":11,"./todo/list/task/todo-task.api.factory":12,"./todo/list/task/todo-task.component":13,"./todo/list/task/todo-task.enterEditMode.directive.js":14,"./todo/list/task/todo-task.exitEditMode.directive.js":15,"./todo/list/todo-list.component":16,"./todo/list/todo-list.factory":17,"./todo/list/todo-list.filter":18,"./todo/todo.component":19,"./todo/todo.factory":20}],3:[function(require,module,exports){
+},{"./app.config":1,"./app.routes":3,"./login/login.component":4,"./login/user/user.api.factory":5,"./login/user/user.factory":6,"./todo/footer/counter/todo-counter.component":7,"./todo/footer/filter/todo-filter.component":8,"./todo/footer/filter/todo-filter.factory":9,"./todo/footer/todo-footer.component":10,"./todo/form/todo-form.component":11,"./todo/list/task/todo-task.api.factory":12,"./todo/list/task/todo-task.component":13,"./todo/list/task/todo-task.enterEditMode.directive.js":14,"./todo/list/task/todo-task.exitEditMode.directive.js":15,"./todo/list/todo-list.component":16,"./todo/list/todo-list.factory":17,"./todo/list/todo-list.filter":18,"./todo/todo.component":19,"./todo/todo.factory":20}],3:[function(require,module,exports){
 "use strict";
 
 /**
@@ -96,10 +96,32 @@ function routesConfig($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state("login", {
             url: "/",
-            template: "<login></login>"
+            template: "<login></login>",
+            resolve: {
+                checkLoggedIn: ["$q", "$state", "userFact", function($q, $state, user) {
+                    var deferred = $q.defer();
+                    
+                    // Check if the user is logged in
+                    user.checkLoggedIn().then(function(res) {
+                        console.log(res);
+                        // If they are, redirect to list
+                        if (res.login === 'true') {
+                            deferred.resolve();
+                            $state.go("todo");
+                        }
+                        // Otherwise, stay
+                        else {
+                            deferred.resolve();
+                        }
+                    }, function(res) {
+                        deferred.resolve();
+                    });
+
+                    return deferred.promise;
+                }]
+            }
         })
         .state("todo", {
-            url: "/todo",
             template: "<todo></todo>"
         });
 }
@@ -110,14 +132,112 @@ module.exports = routesConfig;
 "use strict";
 
 /**
- * loginApi()
- * Login API resources.
+ * LoginCtrl()
+ * Login controller.
+ * @param user: The user factory.
  */
-function loginApi($resource) {
+function LoginCtrl(user, $state) {
+    var vm = this;
+
+    // No error by default
+    vm.error = "";
+
+    /**
+     * registerUser()
+     * Registers a user.
+     */
+    vm.registerUser = function() {
+        var formData = {
+            username: "Hello",
+            email: vm.form.email,
+            password: vm.form.password,
+        };
+
+        user.register(formData).then(function(res) {
+
+        }, function(res) {
+            vm.error = "badRegister";
+        });
+    };
+
+    /**
+     * loginUser()
+     * Logins the user.
+     */
+    vm.loginUser = function() {
+        var formData = {
+            email: vm.form.email,
+            password: vm.form.password,
+        };
+
+        user.login(formData).then(function(res) {
+            // If the user is authenticated, then move to list
+            if (res.login === 'true') {
+                $state.go("todo");
+            }
+
+            // Otherwise, show an error
+            else {
+                vm.error = "badLogin";
+            }
+        }, function(res) {
+            vm.error = "badLogin";
+        });
+    };
+
+    /**
+     * logoutUser()
+     * Logs out the user.
+     */
+    vm.logoutUser = function() {
+        user.logout().then(function(res) {
+            $state.go("login");
+        }, function(res) {
+            alert("Failed to log out");
+        });
+    };
+}
+
+
+module.exports = {
+    controller: ["userFact", "$state", LoginCtrl],
+    templateUrl: "/static/app/login/login.html"
+};
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+/**
+ * userApi()
+ * User API resources.
+ */
+function userApi($resource) {
     return {
         "User": $resource("/user/"),
 
+        "UserLoggedIn": $resource("/user/loggedin", {}, {
+            check: {
+                "method": "POST"
+            }
+        }),
+
         "UserCreate": $resource("/user/create", {}),
+
+        "UserLogin": $resource("/user/auth", {}, {
+            login: {
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                "transformRequest": function(obj) {     // Convert the JSON to seralized POST data
+                    var str = [];
+                    for (var p in obj) {
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    }
+                    return str.join("&");
+                }
+            }
+        }),
 
         "UserLogout": $resource("/user/logout", {}, {
             logout: {
@@ -128,83 +248,63 @@ function loginApi($resource) {
 }
 
 
-module.exports = loginApi;
-
-},{}],5:[function(require,module,exports){
-"use strict";
-
-/**
- * LoginCtrl()
- * Login controller.
- * @param login: The login factory.
- */
-function LoginCtrl(login) {
-    var vm = this;
-
-    /**
-     * registerUser()
-     * Registers a user.
-     */
-    vm.registerUser = function() {
-        var formData = {
-            username: vm.form.username,
-            email: vm.form.email,
-            password: vm.form.password,
-        };
-
-        console.log(formData);
-
-        login.registerUser(formData).then(function(res) {
-            console.log("Created user");
-            console.log(res);
-        }, function(res) {
-            console.log("Failed to create user");
-            document.write(res.data);
-        });
-    };
-
-    /**
-     * loginUser()
-     * Logins a user.
-     */
-    vm.signinUser = function() {
-
-    };
-}
-
-
-module.exports = {
-    controller: ["loginFact", LoginCtrl],
-    templateUrl: "/static/app/login/login.html"
-};
+module.exports = userApi;
 
 },{}],6:[function(require,module,exports){
 "use strict";
 
 /**
- * loginFactory()
- * A factory for login usage.
- * @param loginApi: The login API.
- * @return login: The login object.
+ * userFactory()
+ * A factory for user control.
+ * @param userApi: The user API.
+ * @return user: The user object.
  */
-function loginFactory(loginApi) {
-    var login = {};
+function userFactory(userApi) {
+    var user = {};
+
+    // By default, user is not logged in.
+    user.isLoggedIn = false;
 
     /**
-     * registerUser()
+     * register()
      * Registers a user.
-     * @param userParams: Params to create the user ({ username, email, password })
+     * @param userParams: Params to create the user ({ email, password })
      * @return : A promise of the resource.
      */
-    login.registerUser = function(userParams) {
-        return loginApi.UserCreate.save(userParams).$promise;
+    user.register = function(userParams) {
+        return userApi.UserCreate.save(userParams).$promise;
     };
 
-    return login;
+    /**
+     * login()
+     * Logins a user.
+     * @param userParams: Params to log in the user ({ email, password })
+     * @return : A promise of the resource.
+     */
+    user.login = function(userParams) {
+        return userApi.UserLogin.login(userParams).$promise;
+    };
+
+    /**
+     * logout()
+     * Logs out a user.
+     * @param userParams: Params to log out
+     * @return : A promise of the resource.
+     */
+    user.logout = function(userParams) {
+        return userApi.UserLogout.logout(userParams).$promise;
+    };
+
+    user.checkLoggedIn = function() {
+        return userApi.UserLoggedIn.check().$promise;
+    };
+
+
+    return user;
 }
 
 
-module.exports = loginFactory;
+module.exports = userFactory;
 
 },{}],7:[function(require,module,exports){
 "use strict";
