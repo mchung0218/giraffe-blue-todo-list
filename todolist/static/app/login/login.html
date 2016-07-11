@@ -1,11 +1,11 @@
 <div class="login">
     <form class="login-form" name="$ctrl.form">
         <div class="login-form__error">
-            <span class="login-form__error-text" ng-show="$ctrl.error.badLogin">Incorrect email or password.  Please try again.</span>
-            <span class="login-form__error-text" ng-show="$ctrl.error.badRegisterEmail">That email cannot be registered.  Please try a different one.</span>
-            <span class="login-form__error-text" ng-show="$ctrl.error.badMissingFields">One or more fields has not been filled correctly.  Please fill them out first.</span>
-            <span class="login-form__error-text" ng-show="$ctrl.error.changePassNoUserFound">There is no one registered with that e-mail address.</span>
-            <span class="login-form__error-text" ng-show="$ctrl.error.changePassFail">Unable to change password due to server problem.</span>
+            <span class="login-form__error-text" ng-class="{ 'show': $ctrl.error.badLogin }">Incorrect email or password.  Please try again.</span>
+            <span class="login-form__error-text" ng-class="{ 'show': $ctrl.error.badRegisterEmail }">That email cannot be registered.  Please try a different one.</span>
+            <span class="login-form__error-text" ng-class="{ 'show': $ctrl.error.badMissingFields }">One or more fields has not been filled correctly.  Please fill them out first.</span>
+            <span class="login-form__error-text" ng-class="{ 'show': $ctrl.error.changePassNoUserFound }">There is no one registered with that e-mail address.</span>
+            <span class="login-form__error-text" ng-class="{ 'show': $ctrl.error.changePassFail }">Unable to change password due to server problem.</span>
         </div>
 
         <div class="login-form-inner">

@@ -4,6 +4,12 @@
 .todo-list__task-option {
     @extend %reset-ul;
 
+    display:none;
+
+    .todo-list__task-btn-option--open ~ & {
+        display:block;
+    }
+
     // Xsmall: Set below the task
     @media #{$mq-max-xsmall} {
         clear:both; // Clear away the floated buttons
@@ -54,6 +60,11 @@
             height:25px;
             margin-right:10px;
 
+            // Remove hover color from extend
+            &:hover {
+                background-color:$gray-light;
+            }
+
             // Icon fills
             &--important, &--moderate, &--low {
                 &::before {
@@ -80,6 +91,7 @@
             &--low {
                 @extend .todo-list__task-btn-option--low;
             }
+
         }
     }
 }

@@ -201,6 +201,14 @@ main {
   background-color: #FFF;
 }
 
+.todo-list__task-option {
+  display: none;
+}
+
+.todo-list__task-btn-option--open ~ .todo-list__task-option {
+  display: block;
+}
+
 @media (max-width: 767px) {
   .todo-list__task-option {
     clear: both;
@@ -242,6 +250,10 @@ main {
   width: 25px;
   height: 25px;
   margin-right: 10px;
+}
+
+.todo-list__task-option-level-icon:hover {
+  background-color: #f1f1f2;
 }
 
 .todo-list__task-option-level-icon--important::before, .todo-list__task-option-level-icon--moderate::before, .todo-list__task-option-level-icon--low::before {
@@ -314,7 +326,7 @@ main {
 }
 
 .login-form__error-text {
-  display: block;
+  display: none;
 }
 
 .login-form__input:not(:first-child) {

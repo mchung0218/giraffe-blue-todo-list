@@ -9,9 +9,9 @@
 
 <button type="button" 
         class="todo-list__task-btn-option" 
-        title="Open the task options window" 
-        aria-label="Open the task options window" 
-        ng-click="$ctrl.toggleOptionsMenu()"
+        title="Open the task options menu" 
+        aria-label="Open the task options menu" 
+        toggle-options-menu
         ng-class="[
             { 'todo-list__task-btn-option--completed': $ctrl.task.priority === 'completed' && $ctrl.task.completed === 1 },
             { 'todo-list__task-btn-option--important': $ctrl.task.priority === 'important' && $ctrl.task.completed !== 1 },
@@ -44,7 +44,7 @@
     <span class="todo-list__task-error-message" ng-show="$ctrl.error.markCompleted">Error marking task complete: Failed to mark task complete due to server problem.</span>
 </div>
 
-<ul class="todo-list__task-option" ng-show="$ctrl.optionsMenuOpen">
+<ul class="todo-list__task-option">
     <li class="todo-list__task-option-level" role="button" aria-label="Set task completed" ng-click="$ctrl.changePriority($ctrl.task.id, 'completed')">
         <span class="todo-list__task-option-level-icon todo-list__task-option-level-icon--completed"></span>
         <span class="todo-list__task-option-level-label">Completed</span>

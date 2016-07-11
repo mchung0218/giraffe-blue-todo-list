@@ -28,8 +28,8 @@ var httpConfig =        require("./app.config"),
 
 // Login components
 var loginComponent =    require("./login/login.component"),
-    userFact =         require("./login/user/user.factory"),
-    userApiFact =      require("./login/user/user.api.factory");
+    userFact =          require("./login/user/user.factory"),
+    userApiFact =       require("./login/user/user.api.factory");
 
 // Todo components
 var todoComponent =     require("./todo/todo.component"),
@@ -43,8 +43,9 @@ var listComponent =     require("./todo/list/todo-list.component"),
     listFilter =        require("./todo/list/todo-list.filter"),
     taskComponent =     require("./todo/list/task/todo-task.component"),
     taskApiFact =       require("./todo/list/task/todo-task.api.factory"),
-    taskEnterEditMode = require("./todo/list/task/todo-task.enterEditMode.directive.js"),
-    taskExitEditMode =  require("./todo/list/task/todo-task.exitEditMode.directive.js");
+    taskEnterEditMode = require("./todo/list/task/todo-task.enterEditMode.directive"),
+    taskExitEditMode =  require("./todo/list/task/todo-task.exitEditMode.directive"),
+    taskToggleOptions = require("./todo/list/task/todo-task.toggleOptions.directive");
 
 var footerComponent =   require("./todo/footer/todo-footer.component"),
     counterComponent =  require("./todo/footer/counter/todo-counter.component"),
@@ -53,7 +54,7 @@ var footerComponent =   require("./todo/footer/todo-footer.component"),
 
 
 // App module
-var app = angular.module("todo", ["ui.router", "ngAnimate", "ngResource"]);
+var app = angular.module("todo", ["ui.router", "ngResource"]);
 
 // Configurations
 app.config(["$httpProvider", "$resourceProvider", httpConfig])
@@ -83,9 +84,10 @@ app.component("login", loginComponent)
 // Directives
 app.directive("refreshPage", ["userFact", "$window", todoRefreshPage])
     .directive("taskEnterEditMode", taskEnterEditMode)
-    .directive("taskExitEditMode", taskExitEditMode);
+    .directive("taskExitEditMode", taskExitEditMode)
+    .directive("toggleOptionsMenu", taskToggleOptions);
 
-},{"./app.config":1,"./app.routes":3,"./login/login.component":4,"./login/user/user.api.factory":5,"./login/user/user.factory":6,"./todo/footer/counter/todo-counter.component":7,"./todo/footer/filter/todo-filter.component":8,"./todo/footer/filter/todo-filter.factory":9,"./todo/footer/todo-footer.component":10,"./todo/form/todo-form.component":11,"./todo/list/task/todo-task.api.factory":12,"./todo/list/task/todo-task.component":13,"./todo/list/task/todo-task.enterEditMode.directive.js":14,"./todo/list/task/todo-task.exitEditMode.directive.js":15,"./todo/list/todo-list.component":16,"./todo/list/todo-list.factory":17,"./todo/list/todo-list.filter":18,"./todo/todo.component":19,"./todo/todo.factory":20,"./todo/todo.refreshPage.directive":21}],3:[function(require,module,exports){
+},{"./app.config":1,"./app.routes":3,"./login/login.component":4,"./login/user/user.api.factory":5,"./login/user/user.factory":6,"./todo/footer/counter/todo-counter.component":7,"./todo/footer/filter/todo-filter.component":8,"./todo/footer/filter/todo-filter.factory":9,"./todo/footer/todo-footer.component":10,"./todo/form/todo-form.component":11,"./todo/list/task/todo-task.api.factory":12,"./todo/list/task/todo-task.component":13,"./todo/list/task/todo-task.enterEditMode.directive":14,"./todo/list/task/todo-task.exitEditMode.directive":15,"./todo/list/task/todo-task.toggleOptions.directive":16,"./todo/list/todo-list.component":17,"./todo/list/todo-list.factory":18,"./todo/list/todo-list.filter":19,"./todo/todo.component":20,"./todo/todo.factory":21,"./todo/todo.refreshPage.directive":22}],3:[function(require,module,exports){
 "use strict";
 
 /**
@@ -897,6 +899,45 @@ module.exports = exitEditMode;
 "use strict";
 
 /**
+ * toggleOptionsMenu()
+ * When options button is clicked, toggle options menu.
+ */
+function toggleOptionsMenu() {
+    return {
+        restrict: "A",      // Attribute only
+        link: function($scope, ele) {
+
+            ele.on("click", function() {
+                // If the same button whose menu is opened already is clicked, close it.
+                if (ele.hasClass("todo-list__task-btn-option--open")) {
+                    ele.removeClass("todo-list__task-btn-option--open");
+                }
+
+                // Otherwise...
+                else {
+                    // Get all option buttons with "open" in it.
+                    var openedOptionsMenus = document.getElementsByClassName("todo-list__task-btn-option--open");
+
+                    // Remove the class (hide the options menu)
+                    Array.prototype.forEach.call(openedOptionsMenus, function(theMenuEle) {
+                        angular.element(theMenuEle).removeClass("todo-list__task-btn-option--open");
+                    });
+
+                    // Show the current task's option menu
+                    ele.addClass("todo-list__task-btn-option--open");
+                }
+            });
+        }
+    };
+}
+
+// Exports
+module.exports = toggleOptionsMenu;
+
+},{}],17:[function(require,module,exports){
+"use strict";
+
+/**
  * ListCtrl()
  * Controller for list.
  * @param todo: The todo factory.
@@ -935,7 +976,7 @@ module.exports = {
     templateUrl: "/static/app/todo/list/todo-list.html"
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict";
 
 /**
@@ -1042,7 +1083,7 @@ function todoListFactory() {
 
 module.exports = todoListFactory;
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 /**
@@ -1081,7 +1122,7 @@ function todoListFilter() {
 
 module.exports = todoListFilter;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 
 /**
@@ -1115,7 +1156,7 @@ module.exports = {
     templateUrl: "/static/app/todo/todo.html"
 };
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 
 /**
@@ -1196,7 +1237,7 @@ function todoFactory(taskApi) {
 // Exports
 module.exports = todoFactory;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 /**

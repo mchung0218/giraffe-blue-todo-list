@@ -6,8 +6,8 @@ var httpConfig =        require("./app.config"),
 
 // Login components
 var loginComponent =    require("./login/login.component"),
-    userFact =         require("./login/user/user.factory"),
-    userApiFact =      require("./login/user/user.api.factory");
+    userFact =          require("./login/user/user.factory"),
+    userApiFact =       require("./login/user/user.api.factory");
 
 // Todo components
 var todoComponent =     require("./todo/todo.component"),
@@ -21,8 +21,9 @@ var listComponent =     require("./todo/list/todo-list.component"),
     listFilter =        require("./todo/list/todo-list.filter"),
     taskComponent =     require("./todo/list/task/todo-task.component"),
     taskApiFact =       require("./todo/list/task/todo-task.api.factory"),
-    taskEnterEditMode = require("./todo/list/task/todo-task.enterEditMode.directive.js"),
-    taskExitEditMode =  require("./todo/list/task/todo-task.exitEditMode.directive.js");
+    taskEnterEditMode = require("./todo/list/task/todo-task.enterEditMode.directive"),
+    taskExitEditMode =  require("./todo/list/task/todo-task.exitEditMode.directive"),
+    taskToggleOptions = require("./todo/list/task/todo-task.toggleOptions.directive");
 
 var footerComponent =   require("./todo/footer/todo-footer.component"),
     counterComponent =  require("./todo/footer/counter/todo-counter.component"),
@@ -31,7 +32,7 @@ var footerComponent =   require("./todo/footer/todo-footer.component"),
 
 
 // App module
-var app = angular.module("todo", ["ui.router", "ngAnimate", "ngResource"]);
+var app = angular.module("todo", ["ui.router", "ngResource"]);
 
 // Configurations
 app.config(["$httpProvider", "$resourceProvider", httpConfig])
@@ -61,4 +62,5 @@ app.component("login", loginComponent)
 // Directives
 app.directive("refreshPage", ["userFact", "$window", todoRefreshPage])
     .directive("taskEnterEditMode", taskEnterEditMode)
-    .directive("taskExitEditMode", taskExitEditMode);
+    .directive("taskExitEditMode", taskExitEditMode)
+    .directive("toggleOptionsMenu", taskToggleOptions);
