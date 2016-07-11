@@ -32,6 +32,15 @@
       {{ $ctrl.task.text }}
 </span>
 
+<div class="todo-list__task-error">
+    <span class="todo-list__task-error-message" ng-show="$ctrl.error.permissionEdit">Error editing task: Permission denied.</span>
+    <span class="todo-list__task-error-message" ng-show="$ctrl.error.failEdit">Error editing task: Failed to change task name due to server problem.</span>
+    <span class="todo-list__task-error-message" ng-show="$ctrl.error.permissionDelete">Error deleting task: Permission denied.</span>
+    <span class="todo-list__task-error-message" ng-show="$ctrl.error.failDelete">Error deleting task: Failed to delete task due to server problem.</span>
+    <span class="todo-list__task-error-message" ng-show="$ctrl.error.changingPriority">Error changing priority: Failed to change priority due to server problem.</span>
+    <span class="todo-list__task-error-message" ng-show="$ctrl.error.markCompleted">Error marking task complete: Failed to mark task complete due to server problem.</span>
+</div>
+
 <ul class="todo-list__task-option" ng-show="$ctrl.optionsMenuOpen">
     <li class="todo-list__task-option-level" role="button" aria-label="Set task completed" ng-click="$ctrl.changePriority($ctrl.task.id, 'completed'); $ctrl.markCompleted($ctrl.task.id)">
         <span class="todo-list__task-option-level-icon todo-list__task-option-level-icon--completed"></span>

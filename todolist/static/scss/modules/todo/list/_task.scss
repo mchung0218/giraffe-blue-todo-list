@@ -11,6 +11,19 @@
 
     border-top:2px solid $gray-dark;
 
+    // Error messages container
+    &-error {
+        color:$red;
+        font-size:$font-size-small;
+        font-weight:300;
+
+        &-message {
+            display:block;
+            
+            margin-top:10px;
+        }
+    }
+
     // The buttons
     &-btn-option, &-btn-remove {
         width:50px;

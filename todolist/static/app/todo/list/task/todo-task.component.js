@@ -12,6 +12,26 @@ function TaskCtrl(todo, todoList) {
     // Initially the options menu is closed
     vm.optionsMenuOpen = false;
 
+    // Keep track of errors
+    vm.error = {
+        permissionEdit: false,
+        failEdit: false,
+        permissionDelete: false,
+        failDelete: false,
+        changePriority: false,
+        markCompleted: false
+    };
+
+    /**
+     * resetErrors()
+     * Reset errors.
+     */
+    vm.resetErrors = function() {
+        for (var error in vm.error) {
+            vm.error[error] = false;
+        }
+    };
+
     /**
      * toggleOptionsMenu()
      * Toggles the option menu.
@@ -26,12 +46,26 @@ function TaskCtrl(todo, todoList) {
      * @param taskId: The task id number.
      */
     vm.deleteTask = function(taskId) {
-        todo.deleteTask(taskId).then(function(res) {
-            // If successful, update the list view.
-            todoList.deleteTask(taskId);
+        vm.resetErrors();
 
+        todo.deleteTask(taskId).then(function(res) {
+            if (res.error === "true") {
+                console.log(res.error);
+                if (res.errorMessage === "Permission Denied") {
+                    vm.error.permissionDelete = true;
+                }
+
+                else {
+                    vm.error.failDelete = true;
+                }
+            }
+
+            // If successful, update the list view.
+            else {
+                todoList.deleteTask(taskId);
+            }
         }, function(res) {
-            alert("Task failed to get deleted.");
+            vm.error.failDelete = true;
         });
     };
 
@@ -44,15 +78,31 @@ function TaskCtrl(todo, todoList) {
     vm.editTask = function(taskId, name) {
         // If name changes and there is at least one character in it, then do the operation
         if (name.length > 0 && name !== vm.prevName) {
-            todo.editTask(taskId, name).then(function(res) {
-                // If successful, update the list view.
-                todoList.editTask(taskId, name);
+            vm.resetErrors();
 
+            todo.editTask(taskId, name).then(function(res) {
+                if (res.error === "true") {
+                    // If error, return it back to the way it was.
+                    vm.task.text = vm.prevName;
+
+                    if (res.errorMessage === "Permission Denied") {
+                        vm.error.permissionEdit = true;
+                    }
+
+                    else {
+                        vm.error.failEdit = true;
+                    }
+                }
+                
+                // If successful, update the list view.
+                else {
+                    todoList.editTask(taskId, name);
+                }
             }, function(res) {
                 // If name changing fails, return it back to the way it was.
                 vm.task.text = vm.prevName;
                 
-                alert("Task failed to update its name.");
+                vm.error.failEdit = true;
             });
         }
 
@@ -69,12 +119,20 @@ function TaskCtrl(todo, todoList) {
      * @param priority: The priority level to change to.
      */
     vm.changePriority = function(taskId, priority) {
+        vm.resetErrors();
+
         todo.changePriority(taskId, priority).then(function(res) {
+            if (res.error === "true") {
+                vm.error.changingPriority = true;
+            }
+
             // If successful, update the list view.
-            todoList.changePriority(taskId, priority);
+            else {
+                todoList.changePriority(taskId, priority);
+            }
 
         }, function(res) {
-            alert("Task failed to change priority.");
+            vm.error.changingPriority = true;
         });
     };
 
@@ -84,12 +142,20 @@ function TaskCtrl(todo, todoList) {
      * @param taskId: The task id number.
      */
     vm.markCompleted = function(taskId) {
+        vm.resetErrors();
+
         todo.markCompleted(taskId).then(function(res) {
+            if (res.error === "true") {
+                vm.error.markCompleted = true;
+            }
+            
             // If successful, update the list view.
-            todoList.markCompleted(taskId);
+            else {
+                todoList.markCompleted(taskId);
+            }
             
         }, function(res) {
-            alert("Task failed to mark completed.");
+            vm.error.markCompleted = true;
         });
     };
 }

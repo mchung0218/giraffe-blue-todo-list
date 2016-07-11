@@ -114,6 +114,17 @@ main {
   border-top: 2px solid #d1d2d4;
 }
 
+.todo-list__task-error {
+  color: #eb3e30;
+  font-size: 0.66667rem;
+  font-weight: 300;
+}
+
+.todo-list__task-error-message {
+  display: block;
+  margin-top: 10px;
+}
+
 .todo-list__task-btn-option, .todo-list__task-option-level-icon, .todo-list__task-btn-remove {
   width: 50px;
   height: 50px;
