@@ -199,7 +199,6 @@ function LoginCtrl(user, $state) {
                 vm.error = "badLogin";
             }
         }, function(res) {
-            console.log(res);
             vm.error = "badLogin";
         });
     };
