@@ -17,6 +17,18 @@ input {
   outline: 0;
 }
 
+input:invalid {
+  box-shadow: none;
+}
+
+input:-moz-submit-invalid {
+  box-shadow: none;
+}
+
+input:-moz-ui-invalid {
+  box-shadow: none;
+}
+
 ::-webkit-input-placeholder {
   font-style: italic;
   text-align: center;
@@ -30,6 +42,7 @@ input {
 :-ms-input-placeholder {
   font-style: italic;
   text-align: center;
+  color: #d1d2d4;
 }
 
 :-moz-placeholder {
