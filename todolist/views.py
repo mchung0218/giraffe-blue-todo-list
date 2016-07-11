@@ -34,7 +34,8 @@ def task(request, id):
     # Add task
     if request.method == 'POST':
         try:
-            new_task = Task(text=request.POST["text"],
+            new_task = Task(owner=request.user,
+                            text=request.POST["text"],
                             priority=request.POST["priority"],
                             completed=0)
             new_task.save()
@@ -52,14 +53,14 @@ def task(request, id):
     elif request.method == 'PATCH':
         try:
             task = get_object_or_404(Task, id=id)
-			username = request.user.username
-			if task.owner == username:
+            username = request.user.username
+            if task.owner == username:
             	body_unicode = request.body.decode('utf-8')
             	body = json.loads(body_unicode)
             	task.text = body["text"]
             	task.save()
-				return JsonResponse({'error': 'false'})
-			else:
+                return JsonResponse({'error': 'false'})
+            else:
 				return JsonResponse({'error': 'true', 'errorMessage': 'Permission Denied'})
             
         except Exception as e:
@@ -69,11 +70,11 @@ def task(request, id):
     elif request.method == 'DELETE':
         try:
             task = get_object_or_404(Task, id=id)
-			username = request.user.username
-			if task.owner == username:
+            username = request.user.username
+            if task.owner == username:
             	task.delete()
-				return JsonResponse({'error': 'false'})
-			else:
+                return JsonResponse({'error': 'false'})
+            else:
 				return JsonResponse({'error': 'true', 'errorMessage': 'Permission Denied'})
             
         except Exception as e:
@@ -140,7 +141,7 @@ def user_create(request):
             body = json.loads(body_unicode)
             username = body["email"]
             password = body["password"]
-            user = User.objects.create_user(username, password)
+            user = User.objects.create_user(username, username, password)
 
             return JsonResponse({'error': 'false'})
         except Exception as e:
