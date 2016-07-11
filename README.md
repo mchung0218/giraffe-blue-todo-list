@@ -20,7 +20,7 @@ To do list project for weeklydev @ r/webdev.
 pip install -r requirements.txt
 ```
 
-To install the psycopg2 requirement, get the [Windows executable](http://www.stickpeople.com/projects/python/win-psycopg/) for the Python version you are using. 
+To install the psycopg2 requirement, get the [Windows executable](http://www.stickpeople.com/projects/python/win-psycopg/) for the Python version you are using.
 
 #### Linux/OSX
 ```
@@ -42,6 +42,27 @@ sudo apt-get install python-dev libpq-dev postgresql postgresql-contrib
     python3 manage.py makemigrations
     python3 manage.py migrate
     ```
+
+#### Last Setup Step
+In mysite/ create a file named "local_settings.py" with the contents:
+```
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+DATABASES = {
+    'default': {
+        ### PostgreSQL Settings
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'bluegiraffe',
+         'USER': 'bluegiraffe',
+         'PASSWORD': 'blue',
+         'HOST': 'localhost',
+         'PORT': '5432',
+    }
+}
+
+DEBUG = True
+```
 
 ## Running the server
 #### Windows
