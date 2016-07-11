@@ -1,5 +1,5 @@
-# giraffe-blue-todo-list
-To do list project for weeklydev @ r/webdev.
+# Todo List by Blue Giraffes Team
+To do list project for weeklydev @ [/r/webdev](https://www.reddit.com/r/webdev/) for the Blue Giraffes Team.
 
 ## Notes
 * Most code goes in: giraffe-blue-todo-list/todolist/
@@ -8,8 +8,8 @@ To do list project for weeklydev @ r/webdev.
 
 ## Browser compatibility
 * Internet Explorer >= 9
-* Google Chrome
-* Mozilla Firefox
+* Chrome
+* Firefox
 
 ## Installation
 * Requires Python 3 and PostgreSQL installed.
