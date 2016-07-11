@@ -182,3 +182,17 @@ def user_loggedin(request):
         return JsonResponse({'login': 'true', 'username': request.user.username })
     else:
         return JsonResponse({'login': 'false' })
+
+
+# /user/changepass
+def user_changepass(request):
+    user = User.objects.get(username=request.user.username)
+
+    if user is not None:
+        user.set_password(request.POST["new_password"])
+        user.save()
+
+        return JsonResponse({'error': 'false'})
+    else:
+        return JsonResponse({'error': 'true',
+                             'errorMessage': 'User not found'})
