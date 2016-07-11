@@ -23,6 +23,9 @@ function FilterCtrl(todoFilter) {
     vm.toggleFilterMenu = function() {
         vm.menuOpen = !vm.menuOpen;
     };
+
+    // On initial call, set to all
+    vm.changeFilter("all");
 }
 
 // Exports
