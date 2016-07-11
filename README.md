@@ -6,6 +6,11 @@ To do list project for weeklydev @ r/webdev.
 * Front-end is ran by AngularJS, bundled with Browserify.
 * Back-end is ran by Django, with PostgreSQL as the database.
 
+## Browser compatibility
+* Internet Explorer >= 9
+* Google Chrome
+* Mozilla Firefox
+
 ## Installation
 * Requires Python 3 and PostgreSQL installed.
 * If you want to use virtualenv go ahead just name it venv or env.
