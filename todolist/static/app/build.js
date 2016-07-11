@@ -661,8 +661,12 @@ function TaskCtrl(todo, todoList) {
             // If successful, update the list view.
             else {
                 todoList.changePriority(taskId, priority);
-            }
 
+                // If completed, mark it completed
+                if (priority === "completed") {
+                    vm.markCompleted(taskId);
+                }
+            }
         }, function(res) {
             vm.error.changingPriority = true;
         });
@@ -963,6 +967,7 @@ module.exports = todoListFilter;
 function TodoCtrl(user, $state) {
     var vm = this;
 
+    // Keep track of username
     vm.username = user.username;
 
     /**

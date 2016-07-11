@@ -128,8 +128,12 @@ function TaskCtrl(todo, todoList) {
             // If successful, update the list view.
             else {
                 todoList.changePriority(taskId, priority);
-            }
 
+                // If completed, mark it completed
+                if (priority === "completed") {
+                    vm.markCompleted(taskId);
+                }
+            }
         }, function(res) {
             vm.error.changingPriority = true;
         });
