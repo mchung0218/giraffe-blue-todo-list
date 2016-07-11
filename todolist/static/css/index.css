@@ -6,7 +6,6 @@ html, body {
 h1 {
   font-size: 2.33333rem;
   font-weight: 100;
-  margin-bottom: 25px;
 }
 
 label {
@@ -54,7 +53,38 @@ main {
   }
 }
 
-.todo {
+.todo__username {
+  margin-bottom: 15px;
+  font-weight: 100;
+}
+
+.todo__logout {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 100;
+}
+
+@media (max-width: 767px) {
+  .todo__logout {
+    padding: 5px 10px;
+    color: #FFF;
+    background-color: rgba(50, 50, 50, 0.55);
+    border: 1px solid rgba(50, 50, 50, 0.75);
+    font-size: 0.8rem;
+  }
+  .todo__logout:hover {
+    background-color: #323232;
+  }
+}
+
+@media (min-width: 768px) {
+  .todo__logout:hover {
+    text-decoration: underline;
+  }
+}
+
+.todo-inner {
   border: 2px solid #d1d2d4;
 }
 

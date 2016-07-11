@@ -23,15 +23,13 @@ function LoginCtrl(user, $state) {
                 password: vm.form.password,
             };
 
-            user
-                .register(formData)
-                .then(function(res) {
-                    // If register is successful, attempt to log in user.
-                    vm.loginUser(formData);
+            user.register(formData).then(function(res) {
+                // If register is successful, attempt to log in user.
+                vm.loginUser(formData);
 
-                }, function(res) {
-                    vm.error = "badRegisterEmail";
-                });
+            }, function(res) {
+                vm.error = "badRegisterEmail";
+            });
         }
 
         // Otherwise, show error
@@ -51,7 +49,10 @@ function LoginCtrl(user, $state) {
         };
 
         user.login(formData).then(function(res) {
-            console.log(res);
+            user.update({
+                username: formData.email
+            });
+
             // If the user is authenticated, then move to list
             if (res.login === 'true') {
                 $state.go("todo");
@@ -64,18 +65,6 @@ function LoginCtrl(user, $state) {
         }, function(res) {
             console.log(res);
             vm.error = "badLogin";
-        });
-    };
-
-    /**
-     * logoutUser()
-     * Logs out the user.
-     */
-    vm.logoutUser = function() {
-        user.logout().then(function(res) {
-            $state.go("login");
-        }, function(res) {
-            alert("Failed to log out");
         });
     };
 }

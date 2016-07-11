@@ -17,6 +17,11 @@ function routesConfig($stateProvider, $urlRouterProvider) {
                     
                     // Check if the user is logged in
                     user.checkLoggedIn().then(function(res) {
+                        // Update the username
+                        user.update({
+                            username: res.username
+                        });
+
                         // If they are, redirect to list
                         if (res.login === 'true') {
                             deferred.resolve();
@@ -36,7 +41,7 @@ function routesConfig($stateProvider, $urlRouterProvider) {
             }
         })
         .state("todo", {
-            template: "<todo></todo>"
+            template: "<todo></todo>",
         });
 }
 

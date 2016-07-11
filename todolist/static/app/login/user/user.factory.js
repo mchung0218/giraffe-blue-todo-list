@@ -7,10 +7,9 @@
  * @return user: The user object.
  */
 function userFactory(userApi) {
-    var user = {};
-
-    // By default, user is not logged in.
-    user.isLoggedIn = false;
+    var user = {
+        username: ""
+    };
 
     /**
      * register()
@@ -48,6 +47,16 @@ function userFactory(userApi) {
      */
     user.checkLoggedIn = function() {
         return userApi.UserLoggedIn.check().$promise;
+    };
+
+    /**
+     * update()
+     * Updates the user object.
+     */
+    user.update = function(userParams) {
+        for (var userKey in userParams) {
+            user[userKey] = userParams[userKey];
+        }
     };
 
     return user;

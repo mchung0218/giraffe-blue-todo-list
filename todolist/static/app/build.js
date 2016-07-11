@@ -103,6 +103,11 @@ function routesConfig($stateProvider, $urlRouterProvider) {
                     
                     // Check if the user is logged in
                     user.checkLoggedIn().then(function(res) {
+                        // Update the username
+                        user.update({
+                            username: res.username
+                        });
+
                         // If they are, redirect to list
                         if (res.login === 'true') {
                             deferred.resolve();
@@ -122,7 +127,7 @@ function routesConfig($stateProvider, $urlRouterProvider) {
             }
         })
         .state("todo", {
-            template: "<todo></todo>"
+            template: "<todo></todo>",
         });
 }
 
@@ -154,15 +159,13 @@ function LoginCtrl(user, $state) {
                 password: vm.form.password,
             };
 
-            user
-                .register(formData)
-                .then(function(res) {
-                    // If register is successful, attempt to log in user.
-                    vm.loginUser(formData);
+            user.register(formData).then(function(res) {
+                // If register is successful, attempt to log in user.
+                vm.loginUser(formData);
 
-                }, function(res) {
-                    vm.error = "badRegisterEmail";
-                });
+            }, function(res) {
+                vm.error = "badRegisterEmail";
+            });
         }
 
         // Otherwise, show error
@@ -182,7 +185,10 @@ function LoginCtrl(user, $state) {
         };
 
         user.login(formData).then(function(res) {
-            console.log(res);
+            user.update({
+                username: formData.email
+            });
+
             // If the user is authenticated, then move to list
             if (res.login === 'true') {
                 $state.go("todo");
@@ -195,18 +201,6 @@ function LoginCtrl(user, $state) {
         }, function(res) {
             console.log(res);
             vm.error = "badLogin";
-        });
-    };
-
-    /**
-     * logoutUser()
-     * Logs out the user.
-     */
-    vm.logoutUser = function() {
-        user.logout().then(function(res) {
-            $state.go("login");
-        }, function(res) {
-            alert("Failed to log out");
         });
     };
 }
@@ -273,7 +267,9 @@ module.exports = userApi;
  * @return user: The user object.
  */
 function userFactory(userApi) {
-    var user = {};
+    var user = {
+        username: ""
+    };
 
     // By default, user is not logged in.
     user.isLoggedIn = false;
@@ -314,6 +310,16 @@ function userFactory(userApi) {
      */
     user.checkLoggedIn = function() {
         return userApi.UserLoggedIn.check().$promise;
+    };
+
+    /**
+     * update()
+     * Updates the user object.
+     */
+    user.update = function(userParams) {
+        for (var userKey in userParams) {
+            user[userKey] = userParams[userKey];
+        }
     };
 
     return user;
@@ -888,15 +894,30 @@ module.exports = todoListFilter;
 /**
  * TodoCtrl()
  * The controller for the entire todo container.
- * @param todo: The todo factory.
+ * @param user: The user factory.
  */
-function TodoCtrl(todo) {
+function TodoCtrl(user, $state) {
     var vm = this;
+
+    vm.username = user.username;
+
+    /**
+     * logoutUser()
+     * Logs out the user.
+     */
+    vm.logoutUser = function() {
+        user.logout().then(function(res) {
+            // Once successful logout, go back to login view
+            $state.go("login");
+        }, function(res) {
+            alert("Failed to log out for some reason.");
+        });
+    };
 }
 
 // Export the component (invoked in app.js)
 module.exports = {
-    controller: ["todoFact", TodoCtrl],
+    controller: ["userFact", "$state", TodoCtrl],
     templateUrl: "/static/app/todo/todo.html"
 };
 

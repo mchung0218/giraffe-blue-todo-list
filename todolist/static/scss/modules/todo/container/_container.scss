@@ -1,4 +1,40 @@
 // Todo block/container
 .todo {
-    border:2px solid $gray-dark;
+    // Username below title
+    &__username {
+        margin-bottom:15px;
+
+        font-weight:100;
+    }
+
+    // Logout button
+    &__logout {
+        position:fixed;
+        top:15px;
+        right:15px;
+        z-index:100;
+
+        @media #{$mq-max-xsmall} {
+            padding:5px 10px;
+            color:$white;
+            background-color:fade-out($black, 0.45);
+            border:1px solid fade-out($black, 0.25);
+            font-size:0.8rem;
+
+            &:hover {
+                background-color:$black;
+            }
+        }
+
+        @media #{$mq-min-small} {
+            &:hover {
+                text-decoration:underline;
+            }
+        }
+    }
+
+    // Inner todo
+    &-inner {
+        border:2px solid $gray-dark;
+    }
 }
