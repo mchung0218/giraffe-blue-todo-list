@@ -2,7 +2,8 @@
         class="todo-list__task-btn-remove" 
         title="Remove the task" 
         aria-label="Remove the task" 
-        ng-click="$ctrl.deleteTask($ctrl.task.id)">
+        ng-click="$ctrl.deleteTask($ctrl.task.id)"
+        refresh-page>
     <img class="todo-list__task-btn-remove-icon img-responsive" src="/static/images/remove.png" alt="Remove task">
 </button>
 
@@ -16,7 +17,8 @@
             { 'todo-list__task-btn-option--important': $ctrl.task.priority === 'important' && $ctrl.task.completed !== 1 },
             { 'todo-list__task-btn-option--moderate': $ctrl.task.priority === 'moderate' && $ctrl.task.completed !== 1 },
             { 'todo-list__task-btn-option--low': $ctrl.task.priority === 'low' && $ctrl.task.completed !== 1 },
-        ]">
+        ]"
+        refresh-page>
 </button>
 
 <input type="text"
@@ -28,7 +30,8 @@
        task-exit-edit-mode>
 
 <span class="todo-list__task-name todo-list__task-name--span"
-      task-enter-edit-mode>
+      task-enter-edit-mode
+      refresh-page>
       {{ $ctrl.task.text }}
 </span>
 

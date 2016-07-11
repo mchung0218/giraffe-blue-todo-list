@@ -36,8 +36,8 @@ function userFactory(userApi) {
      * Logs out a user.
      * @return : A promise of the resource.
      */
-    user.logout = function(userParams) {
-        return userApi.UserLogout.logout(userParams).$promise;
+    user.logout = function() {
+        return userApi.UserLogout.logout().$promise;
     };
 
     /**
@@ -52,6 +52,7 @@ function userFactory(userApi) {
     /**
      * update()
      * Updates the user object.
+     * @param userParams: Parameters to update.
      */
     user.update = function(userParams) {
         for (var userKey in userParams) {

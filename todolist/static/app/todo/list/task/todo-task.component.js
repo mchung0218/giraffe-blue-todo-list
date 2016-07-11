@@ -50,7 +50,6 @@ function TaskCtrl(todo, todoList) {
 
         todo.deleteTask(taskId).then(function(res) {
             if (res.error === "true") {
-                console.log(res.error);
                 if (res.errorMessage === "Permission Denied") {
                     vm.error.permissionDelete = true;
                 }

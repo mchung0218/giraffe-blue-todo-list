@@ -33,7 +33,8 @@ var loginComponent =    require("./login/login.component"),
 
 // Todo components
 var todoComponent =     require("./todo/todo.component"),
-    todoFact =          require("./todo/todo.factory");
+    todoFact =          require("./todo/todo.factory"),
+    todoRefreshPage =   require("./todo/todo.refreshPage.directive");
 
 var formComponent =     require("./todo/form/todo-form.component");
 
@@ -80,10 +81,11 @@ app.component("login", loginComponent)
     .component("todoFilter", filterComponent);
 
 // Directives
-app.directive("taskEnterEditMode", taskEnterEditMode)
+app.directive("refreshPage", ["userFact", "$window", todoRefreshPage])
+    .directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
 
-},{"./app.config":1,"./app.routes":3,"./login/login.component":4,"./login/user/user.api.factory":5,"./login/user/user.factory":6,"./todo/footer/counter/todo-counter.component":7,"./todo/footer/filter/todo-filter.component":8,"./todo/footer/filter/todo-filter.factory":9,"./todo/footer/todo-footer.component":10,"./todo/form/todo-form.component":11,"./todo/list/task/todo-task.api.factory":12,"./todo/list/task/todo-task.component":13,"./todo/list/task/todo-task.enterEditMode.directive.js":14,"./todo/list/task/todo-task.exitEditMode.directive.js":15,"./todo/list/todo-list.component":16,"./todo/list/todo-list.factory":17,"./todo/list/todo-list.filter":18,"./todo/todo.component":19,"./todo/todo.factory":20}],3:[function(require,module,exports){
+},{"./app.config":1,"./app.routes":3,"./login/login.component":4,"./login/user/user.api.factory":5,"./login/user/user.factory":6,"./todo/footer/counter/todo-counter.component":7,"./todo/footer/filter/todo-filter.component":8,"./todo/footer/filter/todo-filter.factory":9,"./todo/footer/todo-footer.component":10,"./todo/form/todo-form.component":11,"./todo/list/task/todo-task.api.factory":12,"./todo/list/task/todo-task.component":13,"./todo/list/task/todo-task.enterEditMode.directive.js":14,"./todo/list/task/todo-task.exitEditMode.directive.js":15,"./todo/list/todo-list.component":16,"./todo/list/todo-list.factory":17,"./todo/list/todo-list.filter":18,"./todo/todo.component":19,"./todo/todo.factory":20,"./todo/todo.refreshPage.directive":21}],3:[function(require,module,exports){
 "use strict";
 
 /**
@@ -270,9 +272,6 @@ function userFactory(userApi) {
         username: ""
     };
 
-    // By default, user is not logged in.
-    user.isLoggedIn = false;
-
     /**
      * register()
      * Registers a user.
@@ -298,8 +297,8 @@ function userFactory(userApi) {
      * Logs out a user.
      * @return : A promise of the resource.
      */
-    user.logout = function(userParams) {
-        return userApi.UserLogout.logout(userParams).$promise;
+    user.logout = function() {
+        return userApi.UserLogout.logout().$promise;
     };
 
     /**
@@ -314,6 +313,7 @@ function userFactory(userApi) {
     /**
      * update()
      * Updates the user object.
+     * @param userParams: Parameters to update.
      */
     user.update = function(userParams) {
         for (var userKey in userParams) {
@@ -583,7 +583,6 @@ function TaskCtrl(todo, todoList) {
 
         todo.deleteTask(taskId).then(function(res) {
             if (res.error === "true") {
-                console.log(res.error);
                 if (res.errorMessage === "Permission Denied") {
                     vm.error.permissionDelete = true;
                 }
@@ -1066,5 +1065,32 @@ function todoFactory(taskApi) {
 
 // Exports
 module.exports = todoFactory;
+
+},{}],21:[function(require,module,exports){
+"use strict";
+
+/**
+ * refreshPage()
+ * When user is changed while view remains, force refresh the page.
+ * @param: user: User factory.
+ */
+function refreshPage(user, $window) {
+    return {
+        restrict: "A",
+        link: function($scope, ele) {
+            ele.on("click", function() {
+                // Using checkLoggedIn, find the current logged in user
+                user.checkLoggedIn().then(function(res) {
+                    // If the current logged in user is different than the one initially set, refresh
+                    if (user.username !== res.username) {
+                        $window.location.reload();
+                    }
+                });
+            });
+        }
+    };
+}
+
+module.exports = refreshPage;
 
 },{}]},{},[2]);

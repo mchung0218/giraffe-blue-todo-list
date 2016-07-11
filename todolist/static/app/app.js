@@ -11,7 +11,8 @@ var loginComponent =    require("./login/login.component"),
 
 // Todo components
 var todoComponent =     require("./todo/todo.component"),
-    todoFact =          require("./todo/todo.factory");
+    todoFact =          require("./todo/todo.factory"),
+    todoRefreshPage =   require("./todo/todo.refreshPage.directive");
 
 var formComponent =     require("./todo/form/todo-form.component");
 
@@ -58,5 +59,6 @@ app.component("login", loginComponent)
     .component("todoFilter", filterComponent);
 
 // Directives
-app.directive("taskEnterEditMode", taskEnterEditMode)
+app.directive("refreshPage", ["userFact", "$window", todoRefreshPage])
+    .directive("taskEnterEditMode", taskEnterEditMode)
     .directive("taskExitEditMode", taskExitEditMode);
