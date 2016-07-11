@@ -1,3 +1,14 @@
 .login {
     // border:2px solid $gray-dark;
+
+    // Switch between modes
+    &__change {
+        display:inline-block;
+
+        margin-top:15px;
+
+        color:$gray-core;
+        font-size:$font-size-small;
+        text-decoration:underline;
+    }
 }

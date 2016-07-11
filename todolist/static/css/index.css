@@ -55,7 +55,7 @@ main {
 
 .todo__username {
   margin-bottom: 15px;
-  font-weight: 100;
+  font-weight: 300;
 }
 
 .todo__logout {
@@ -294,6 +294,14 @@ main {
   text-align: center;
 }
 
+.login__change {
+  display: inline-block;
+  margin-top: 15px;
+  color: #979798;
+  font-size: 0.66667rem;
+  text-decoration: underline;
+}
+
 .login-form-inner {
   border: 2px solid #d1d2d4;
 }
@@ -344,4 +352,8 @@ main {
 
 .login-form__submit:hover {
   background-color: #323232;
+}
+
+.login-form__submit--changepass {
+  width: 100%;
 }

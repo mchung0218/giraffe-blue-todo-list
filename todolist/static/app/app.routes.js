@@ -41,7 +41,10 @@ function routesConfig($stateProvider, $urlRouterProvider) {
             }
         })
         .state("todo", {
-            template: "<todo></todo>",
+            template: "<todo></todo>"
+        })
+        .state("forgot", {
+            template: "<forgot></forgot>"
         });
 }
 

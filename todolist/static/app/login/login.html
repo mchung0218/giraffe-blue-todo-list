@@ -1,19 +1,25 @@
 <div class="login">
     <form class="login-form" name="$ctrl.form">
         <div class="login-form__error">
-            <span class="login-form__error-text" ng-show="$ctrl.error === 'badLogin'">Incorrect email or password.  Please try again.</span>
-            <span class="login-form__error-text" ng-show="$ctrl.error === 'badRegisterEmail'">That email cannot be registered.  Please try a different one.</span>
-            <span class="login-form__error-text" ng-show="$ctrl.error === 'badRegisterMissing'">One or more fields has not been filled correctly.  Please fill them out first.</span>
+            <span class="login-form__error-text" ng-show="$ctrl.error.badLogin">Incorrect email or password.  Please try again.</span>
+            <span class="login-form__error-text" ng-show="$ctrl.error.badRegisterEmail">That email cannot be registered.  Please try a different one.</span>
+            <span class="login-form__error-text" ng-show="$ctrl.error.badMissingFields">One or more fields has not been filled correctly.  Please fill them out first.</span>
+            <span class="login-form__error-text" ng-show="$ctrl.error.changePassNoUserFound">There is no one registered with that e-mail address.</span>
+            <span class="login-form__error-text" ng-show="$ctrl.error.changePassFail">Unable to change password due to server problem.</span>
         </div>
 
         <div class="login-form-inner">
             <input type="email" class="login-form__input login-form__input--email" placeholder="Email" ng-model="$ctrl.form.email">
-            <input type="password" class="login-form__input login-form__input--password" placeholder="Password" ng-model="$ctrl.form.password">
+            <input type="password" class="login-form__input login-form__input--password" placeholder="Password" ng-model="$ctrl.form.password" ng-if="!$ctrl.forgotMode">
+            <input type="password" class="login-form__input login-form__input--password" placeholder="New Password" ng-model="$ctrl.form.new_password" ng-if="$ctrl.forgotMode">
 
             <div class="login-form__submits clearfix">
-                <input type="submit" class="login-form__submit login-form__submit--signin" name="submit" value="Sign in" ng-click="$ctrl.loginUser()">
-                <input type="submit" class="login-form__submit login-form__submit--register" name="submit" value="Register" ng-click="$ctrl.registerUser()">
+                <input type="submit" class="login-form__submit login-form__submit--signin" name="submit" value="Sign in" ng-click="$ctrl.loginUser()" ng-if="!$ctrl.forgotMode">
+                <input type="submit" class="login-form__submit login-form__submit--register" name="submit" value="Register" ng-click="$ctrl.registerUser()" ng-if="!$ctrl.forgotMode">
+                <input type="submit" class="login-form__submit login-form__submit--changepass" name="submit" value="Change password" ng-click="$ctrl.changePass()" ng-if="$ctrl.forgotMode">
             </div>
         </div>
     </form>
+    <span role="button" class="login__change" ng-click="$ctrl.forgotMode = true; $ctrl.clearPassFields(); $ctrl.resetErrors()" ng-hide="$ctrl.forgotMode">Forgot Password?</span>
+    <span role="button" class="login__change" ng-click="$ctrl.forgotMode = false; $ctrl.clearPassFields(); $ctrl.resetErrors()" ng-show="$ctrl.forgotMode">Back to Login</span>
 </div>

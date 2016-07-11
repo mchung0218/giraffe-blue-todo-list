@@ -41,6 +41,16 @@ function userFactory(userApi) {
     };
 
     /**
+     * changePass()
+     * Updates a password.
+     * @param userParams: Parameters of the user ({ email, new password })
+     * @return : A promise of the resource.
+     */
+    user.changePass = function(userParams) {
+        return userApi.UserChangePass.save(userParams).$promise;
+    };
+
+    /**
      * checkLoggedIn()
      * Checks if a user is logged in or not.
      * @return : A promise of the resource.
