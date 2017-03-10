@@ -1,6 +1,8 @@
 # Todo List by Blue Giraffes Team
 To do list project for weeklydev @ [/r/webdev](https://www.reddit.com/r/webdev/) for the Blue Giraffes Team.
 
+Demo: [https://bluegiraffe-todolist.herokuapp.com/](https://bluegiraffe-todolist.herokuapp.com/)
+
 ## Notes
 * Most code goes in: giraffe-blue-todo-list/todolist/
 * Front-end is ran by AngularJS, bundled with Browserify.
